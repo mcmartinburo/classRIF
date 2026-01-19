@@ -43,7 +43,6 @@ const items = [
 /*************************************************
  * FUNCION PARA GENERAR LA TABLA DE ÍTEMS
  *************************************************/
-function generarTablaItems() {
 // Generar tabla de ítems cuando la página termine de cargar
 window.onload = function() {
   const tbody = document.getElementById("tabla-items");
@@ -66,9 +65,6 @@ window.onload = function() {
     tbody.appendChild(row);
   });
 };
-
-// Generar la tabla inmediatamente al cargar el script
-generarTablaItems();
 
 /*************************************************
  * PROCESAR RESULTADOS
