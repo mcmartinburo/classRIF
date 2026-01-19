@@ -2,17 +2,18 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Análisis de resultados</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+
 <div class="container">
   <h1>Análisis de resultados</h1>
   <p>Introduce <strong>1</strong> si la respuesta es correcta o <strong>0</strong> si es incorrecta.</p>
 
-  <!-- Tabla de entrada -->
-  <table>
+  <table border="1">
     <thead>
       <tr>
         <th>Ítem</th>
@@ -22,17 +23,20 @@
         <th>¿Correcto?</th>
       </tr>
     </thead>
-    <tbody id="tabla-items"></tbody>
+    <tbody id="tabla-items">
+      </tbody>
   </table>
 
-  <button onclick="procesar()">Ver resultado</button>
+  <div style="margin: 20px 0;">
+    <button onclick="procesar()">Ver resultado</button>
+  </div>
 
-  <!-- Resultado de condición predominante -->
+  <hr>
+
   <h2 id="condicionFinal"></h2>
 
-  <!-- Tabla de resultados primero -->
   <h2>Tabla de resultados</h2>
-  <table id="tabla-resultados">
+  <table id="tabla-resultados" border="1">
     <thead>
       <tr>
         <th>Condición</th>
@@ -41,14 +45,18 @@
       </tr>
     </thead>
     <tbody>
-      <!-- Se llenará automáticamente -->
-    </tbody>
+      </tbody>
   </table>
 
-  <!-- Gráfica debajo de la tabla -->
-  <h2>Gráfica de resultados</h2>
-  <canvas id="grafica"></canvas>
+  <div style="width: 80%; margin: 20px auto;">
+    <h2>Gráfica de resultados</h2>
+    <canvas id="grafica"></canvas>
+  </div>
 </div>
+
+<script src="script.js"></script>
+</body>
+</html>
 
 <script src="script.js"></script>
 </body>
