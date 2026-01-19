@@ -59,7 +59,7 @@ button:hover { background: #1a252f; }
 /* GRÁFICA ALARGADA */
 .chart-container {
     position: relative;
-    width: 100%;
+    width: 70%;
     height: 300px; /* Altura fija para efecto alargado */
     margin: 20px 0;
 }
