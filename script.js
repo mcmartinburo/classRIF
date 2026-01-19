@@ -84,8 +84,29 @@ function procesar() {
   const condicionFinal = Object.keys(resultados).reduce((a,b) => resultados[a]>=resultados[b]?a:b);
   document.getElementById("condicionFinal").innerText = "Condición predominante: " + condicionFinal;
 
-  dibujarGrafica(resultados, totalItems);
   generarTablaResultados(resultados, totalItems);
+  dibujarGrafica(resultados, totalItems);
+}
+
+/*************************************************
+ * GENERAR TABLA DE RESULTADOS
+ *************************************************/
+function generarTablaResultados(resultados, totalItems) {
+  const tbodyRes = document.getElementById("tabla-resultados").querySelector("tbody");
+  tbodyRes.innerHTML = "";
+
+  const nombresCondicion = { "rp+":"Practicados", "rp-":"No practicados", "nrp":"Relacionados pero NP" };
+
+  ["rp+","rp-","nrp"].forEach(c => {
+    const porcentaje = Math.round((resultados[c]/totalItems[c])*100);
+    const fila = document.createElement("tr");
+    fila.innerHTML = `
+      <td>${nombresCondicion[c]}</td>
+      <td>${porcentaje}%</td>
+      <td>${resultados[c]}</td>
+    `;
+    tbodyRes.appendChild(fila);
+  });
 }
 
 /*************************************************
@@ -108,7 +129,7 @@ function dibujarGrafica(resultados, totalItems) {
     data:{
       labels: etiquetas,
       datasets:[{
-        label:"% Recuerdo",
+        label:"% de recuerdo",
         data: data,
         backgroundColor: colores
       }]
@@ -116,29 +137,22 @@ function dibujarGrafica(resultados, totalItems) {
     options:{
       responsive:true,
       scales:{
-        y:{ beginAtZero:true, max:100, ticks:{ stepSize:10 } }
+        y:{
+          beginAtZero:true,
+          max:100,
+          title:{
+            display:true,
+            text:"% de recuerdo"
+          },
+          ticks:{
+            stepSize:10
+          }
+        }
       }
     }
   });
 }
 
-/*************************************************
- * GENERAR TABLA DE RESULTADOS
- *************************************************/
-function generarTablaResultados(resultados, totalItems) {
-  const tbodyRes = document.getElementById("tabla-resultados").querySelector("tbody");
-  tbodyRes.innerHTML = "";
-
-  const nombresCondicion = { "rp+":"Practicados", "rp-":"No practicados", "nrp":"Relacionados pero NP" };
-
-  ["rp+","rp-","nrp"].forEach(c => {
-    const porcentaje = Math.round((resultados[c]/totalItems[c])*100);
-    const fila = document.createElement("tr");
-    fila.innerHTML = `
-      <td>${nombresCondicion[c]}</td>
-      <td>${porcentaje}%</td>
-      <td>${resultados[c]}</td>
-    `;
     tbodyRes.appendChild(fila);
   });
 }
