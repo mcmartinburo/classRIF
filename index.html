@@ -3,35 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análisis de Memoria</title>
+    <title>Análisis de Memoria - Resultados</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
-    <h1>Análisis de Resultados</h1>
-    
-    <div class="data-entry">
+    <header>
+        <h1>Análisis de Resultados</h1>
+        <p>Introduce <strong>1</strong> (acierto) o <strong>0</strong> (error) para cada ítem.</p>
+    </header>
+
+    <section class="data-entry">
         <table>
             <thead>
                 <tr>
                     <th>Ítem</th>
                     <th>Categoría</th>
                     <th>Objetivo</th>
-                    <th>Acierto (1/0)</th>
-                    <th>Condición</th>
-                </tr>
+                    <th>¿Correcto?</th> <th>Condición</th>  </tr>
             </thead>
             <tbody id="tabla-items"></tbody>
         </table>
-        <button onclick="procesar()">Ver Resultados</button>
-    </div>
+
+        <button onclick="procesar()">Procesar y Ver Resultados</button>
+    </section>
 
     <hr>
 
     <section id="resultados-seccion">
-        <h2 id="mensaje-espera">Esperando datos...</h2>
-        
+        <h2 id="condicionFinal">Esperando datos...</h2>
+
         <div class="results-grid">
             <div class="table-wrapper">
                 <h2>Resumen de Métricas</h2>
