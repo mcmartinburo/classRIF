@@ -1,36 +1,3 @@
-// Añade esta línea al principio de todo tu script.js para verificar que carga
-console.log("Script cargado correctamente");
-
-function renderizarTablaItems() {
-    const tbody = document.getElementById("tabla-items");
-    
-    // Si no encuentra el elemento, lo buscamos de nuevo tras un pequeño retraso
-    if (!tbody) {
-        console.warn("No se encontró tabla-items, reintentando...");
-        setTimeout(renderizarTablaItems, 100); 
-        return;
-    }
-
-    tbody.innerHTML = ""; 
-    items.forEach((item, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${item.id}</td>
-            <td>${item.categoria}</td>
-            <td>${item.objetivo}</td>
-            <td><strong>${item.condicion.toUpperCase()}</strong></td>
-            <td>
-                <input type="number" min="0" max="1" value="0" id="resp-${index}">
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
-    console.log("Tabla renderizada con éxito");
-}
-
-// Cambia la última línea por esta
-window.onload = renderizarTablaItems;
-
 /*************************************************
  * DEFINICIÓN DE LOS ÍTEMS (36)
  *************************************************/
@@ -64,7 +31,109 @@ const items = [
   {id:27, categoria:"DEPORTE", objetivo:"tenis", condicion:"rp+"},
   {id:28, categoria:"FRUTAS", objetivo:"fresa", condicion:"rp+"},
   {id:29, categoria:"PROFESIONES", objetivo:"dentista", condicion:"rp+"},
-  {id:30, categoria:"DEPORTE", objetivo:"natación", condicion:"rp+"
+  {id:30, categoria:"DEPORTE", objetivo:"natación", condicion:"rp+"},
+  {id:31, categoria:"FRUTAS", objetivo:"piña", condicion:"rp+"},
+  {id:32, categoria:"ANIMALES", objetivo:"burro", condicion:"rp+"},
+  {id:33, categoria:"PROFESIONES", objetivo:"veterinario", condicion:"rp+"},
+  {id:34, categoria:"ANIMALES", objetivo:"paloma", condicion:"rp+"},
+  {id:35, categoria:"ANIMALES", objetivo:"oveja", condicion:"rp+"},
+  {id:36, categoria:"PROFESIONES", objetivo:"jardinero", condicion:"rp+"}
+];
+
+let chart = null;
+
+/*************************************************
+ * GENERAR TABLA DE ÍTEMS
+ *************************************************/
+function renderizarTablaItems() {
+  const tbody = document.getElementById("tabla-items");
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+
+  items.forEach((item, index) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${item.id}</td>
+      <td>${item.categoria}</td>
+      <td>${item.objetivo}</td>
+      <td>${item.condicion}</td>
+      <td>
+        <input type="number" min="0" max="1" step="1" id="resp-${index}" value="0">
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+/*************************************************
+ * PROCESAR RESULTADOS
+ *************************************************/
+function procesar() {
+  const resultados = { "nrp": 0, "rp-": 0, "rp+": 0 };
+  const totalItems = { "nrp": 0, "rp-": 0, "rp+": 0 };
+
+  items.forEach((item, index) => {
+    const input = document.getElementById(`resp-${index}`);
+    const valor = Number(input.value);
+    
+    totalItems[item.condicion]++;
+    if (valor === 1) resultados[item.condicion]++;
+  });
+
+  // Condición predominante
+  const nombres = { "rp+": "Practicados", "rp-": "No Practicados", "nrp": "Relacionados (NRP)" };
+  const porcentajes = {
+    "rp+": (resultados["rp+"] / totalItems["rp+"]) * 100,
+    "rp-": (resultados["rp-"] / totalItems["rp-"]) * 100,
+    "nrp": (resultados["nrp"] / totalItems["nrp"]) * 100
+  };
+
+  const mejor = Object.keys(porcentajes).reduce((a, b) => porcentajes[a] >= porcentajes[b] ? a : b);
+  document.getElementById("condicionFinal").innerText = "Condición predominante: " + nombres[mejor];
+
+  generarTablaResultados(resultados, totalItems);
+  dibujarGrafica(resultados, totalItems);
+}
+
+function generarTablaResultados(resultados, totalItems) {
+  const tbodyRes = document.querySelector("#tabla-resultados tbody");
+  tbodyRes.innerHTML = "";
+  const nombres = { "rp+": "Practicados", "rp-": "No practicados", "nrp": "Relacionados" };
+
+  ["rp+", "rp-", "nrp"].forEach(c => {
+    const porc = Math.round((resultados[c] / totalItems[c]) * 100) || 0;
+    const fila = document.createElement("tr");
+    fila.innerHTML = `<td>${nombres[c]}</td><td>${porc}%</td><td>${resultados[c]}</td>`;
+    tbodyRes.appendChild(fila);
+  });
+}
+
+function dibujarGrafica(resultados, totalItems) {
+  const ctx = document.getElementById("grafica").getContext("2d");
+  if (chart) chart.destroy();
+
+  chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["Practicados", "No practicados", "Relacionados"],
+      datasets: [{
+        label: "% de recuerdo",
+        data: [
+          (resultados["rp+"]/totalItems["rp+"])*100,
+          (resultados["rp-"]/totalItems["rp-"])*100,
+          (resultados["nrp"]/totalItems["nrp"])*100
+        ],
+        backgroundColor: ["#2ecc71", "#e74c3c", "#3498db"]
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: { y: { beginAtZero: true, max: 100 } }
     }
   });
 }
+
+// Iniciar al cargar
+document.addEventListener("DOMContentLoaded", renderizarTablaItems);
