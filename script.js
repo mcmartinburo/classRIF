@@ -112,11 +112,11 @@ function dibujarGrafica(res, tot, orden) {
     chart = new Chart(ctx, {
         type: "bar",
         data: {
-            labels: ["Practicados (RP+)", "No Practicados (RP-)", "Relacionados (NRP)"],
+            // Aseguramos que las etiquetas coincidan con el orden de los datos
+            labels: ["Practicados (RP+)", "Relacionados (NRP)", "No Practicados (RP-)"],
             datasets: [{
-                label: "% de Recuerdo",
                 data: datosPorcentaje,
-                backgroundColor: ["#A8E6CF", "#AEC6EF", "#FF8B94"], 
+                backgroundColor: ["#A8E6CF", "#FF8B94", "#AEC6EF"], // RP+ (Verde), NRP (Rojo), RP- (Azul)
                 borderWidth: 1
             }]
         },
@@ -124,31 +124,25 @@ function dibujarGrafica(res, tot, orden) {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-                y: { 
-                    beginAtZero: true, 
+                y: {
+                    beginAtZero: true,
                     max: 100,
-                    // AQUÍ AÑADIMOS LA ETIQUETA DEL EJE Y
                     title: {
                         display: true,
-                        text: '% de Recuerdo',
+                        text: '% de Recuerdo', // AQUÍ ESTÁ EL TÍTULO
                         color: '#2c3e50',
                         font: {
                             size: 14,
-                            weight: 'bold',
-                            family: 'Segoe UI'
+                            weight: 'bold'
                         }
                     },
                     ticks: {
-                        callback: function(value) {
-                            return value + "%"; // Mantiene el símbolo de porcentaje en los números
-                        }
+                        callback: function(value) { return value + "%"; }
                     }
                 }
             },
             plugins: {
-                legend: {
-                    display: false // Ocultamos la leyenda superior para que no se repita
-                }
+                legend: { display: false }
             }
         }
     });
