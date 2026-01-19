@@ -69,9 +69,9 @@ function procesar() {
 
   // 2. Definir Nombres y Orden Estricto
   const nombresLargo = { 
-    "rp+": "Practicados", 
-    "rp-": "No practicados", 
-    "nrp": "Relacionados pero no practicados" 
+    "rp+": "Practicados (RP+)", 
+    "rp-": "No practicados (NRP)", 
+    "nrp": "Relacionados pero no practicados (RP-)" 
   };
   const orden = ["rp+", "rp-", "nrp"];
 
@@ -111,7 +111,21 @@ function dibujarGrafica(res, tot, orden, nombres) {
       datasets: [{
         label: "% de recuerdo",
         data: datos,
-        backgroundColor: ["#2ecc71", "#e74c3c", "#3498db"]
+        // NUEVA PALETA PASTEL:
+        // Verde Pastel (#A8E6CF) -> Practicados (rp+)
+        // Azul Pastel  (#DCEDC1) -> No practicados (rp-) --- Nota: He usado un azul suave/cian
+        // Rojo Pastel  (#FF8B94) -> Relacionados (nrp)
+        backgroundColor: [
+          "rgba(168, 230, 207, 0.8)", // Verde menta pastel
+          "rgba(174, 198, 239, 0.8)", // Azul cielo suave
+          "rgba(255, 139, 148, 0.8)"  // Rojo coral pastel
+        ],
+        borderColor: [
+          "rgba(168, 230, 207, 1)",
+          "rgba(174, 198, 239, 1)",
+          "rgba(255, 139, 148, 1)"
+        ],
+        borderWidth: 1
       }]
     },
     options: {
