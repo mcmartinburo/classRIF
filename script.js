@@ -117,17 +117,19 @@ function dibujarGrafica(resultados) {
     chart.destroy();
   }
 
+  // Datos para la gráfica
+  const etiquetas = ["nrp", "rp-", "rp+"];
+  const colores = ["blue", "red", "green"]; // NRP azul, RP- rojo, RP+ verde
+  const datos = [resultados["nrp"], resultados["rp-"], resultados["rp+"]];
+
   chart = new Chart(ctx, {
     type: "bar",
     data: {
-      labels: ["nrp", "rp-", "rp+"],
+      labels: etiquetas,
       datasets: [{
         label: "Número de aciertos",
-        data: [
-          resultados["nrp"],
-          resultados["rp-"],
-          resultados["rp+"]
-        ]
+        data: datos,
+        backgroundColor: colores
       }]
     },
     options: {
@@ -135,11 +137,37 @@ function dibujarGrafica(resultados) {
       scales: {
         y: {
           beginAtZero: true,
-          ticks: {
-            precision: 0
-          }
+          precision: 0
         }
       }
     }
+  });
+
+  // Generar tabla de resultados
+  const tabla = document.getElementById("tabla-resultados").querySelector("tbody");
+  tabla.innerHTML = ""; // Limpiar tabla anterior
+
+  // Total de ítems por condición
+  const totalItems = {
+    "nrp": items.filter(i => i.condicion === "nrp").length,
+    "rp-": items.filter(i => i.condicion === "rp-").length,
+    "rp+": items.filter(i => i.condicion === "rp+").length
+  };
+
+  const nombresCondicion = {
+    "nrp": "Relacionados pero NP",
+    "rp-": "No practicados",
+    "rp+": "Practicados"
+  };
+
+  ["rp+", "rp-", "nrp"].forEach(c => {
+    const porcentaje = Math.round((resultados[c] / totalItems[c]) * 100);
+    const fila = document.createElement("tr");
+    fila.innerHTML = `
+      <td>${nombresCondicion[c]}</td>
+      <td>${porcentaje}%</td>
+      <td>${resultados[c]}</td>
+    `;
+    tabla.appendChild(fila);
   });
 }
