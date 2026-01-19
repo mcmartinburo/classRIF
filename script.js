@@ -57,9 +57,9 @@ function renderizarTablaItems() {
       <td>${item.id}</td>
       <td>${item.categoria}</td>
       <td>${item.objetivo}</td>
-      <td>${item.condicion}</td>
       <td>
-        <input type="number" min="0" max="1" step="1" id="resp-${index}" value="0">
+      <input type="number" min="0" max="1" step="1" id="resp-${index}" value="0">
+      <td>${item.condicion}</td>
       </td>
     `;
     tbody.appendChild(row);
@@ -87,7 +87,7 @@ function procesar() {
     "nrp": (resultados["nrp"] / totalItems["nrp"]) * 100
   };
 
-  const nombres = { "rp+": "Practicados", "rp-": "No Practicados", "nrp": "Relacionados (NRP)" };
+  const nombres = { "rp+": "Practicados", "rp-": "No Practicados", "nrp": "Relacionados pero NO practicados" };
   const mejor = Object.keys(porcentajes).reduce((a, b) => porcentajes[a] >= porcentajes[b] ? a : b);
   
   document.getElementById("condicionFinal").innerText = "Condición predominante: " + nombres[mejor];
