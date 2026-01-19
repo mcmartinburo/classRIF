@@ -67,9 +67,9 @@ function procesar() {
     });
 
     const nombresLargo = { 
-        "rp+": "Practicados (RP+)", 
-        "rp-": "No practicados (NRP)", 
-        "nrp": "No practicados pero relacionados (RP-)" 
+        "rp+": "Practicados (RP+)",
+        "nrp": "No practicados (NRP)",
+        "rp-": "No practicados pero Relacionados (RP-)"
     };
     const orden = ["rp+", "rp-", "nrp"];
 
