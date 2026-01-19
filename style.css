@@ -1,11 +1,14 @@
+/* 1. VARIABLES Y CONFIGURACIÓN BASE */
 :root {
     --bg: #f4f7f6;
     --primary: #2c3e50;
     --white: #ffffff;
+    --accent: #34495e;
+    --border: #dee2e6;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--bg);
     margin: 0;
     padding: 20px;
@@ -13,6 +16,7 @@ body {
     justify-content: center;
 }
 
+/* 2. CONTENEDOR PRINCIPAL */
 .container {
     width: 100%;
     max-width: 1000px;
@@ -27,71 +31,99 @@ h1, h2 {
     text-align: center; 
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
+/* 3. TABLA DE ENTRADA (MÁS ESTRECHA Y CENTRADA) */
+.data-entry {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra la tabla y el botón */
 }
 
-th { background: #eee; padding: 12px; border-bottom: 2px solid #ddd; }
-td { padding: 10px; border-bottom: 1px solid #eee; text-align: center; }
+table {
+    width: 100%;
+    max-width: 800px; /* Tabla más estrecha que el contenedor (1000px) */
+    border-collapse: collapse;
+    margin: 20px auto;
+    background-color: var(--white);
+}
 
+th { 
+    background: #f8f9fa; 
+    padding: 12px; 
+    border-bottom: 2px solid var(--border); 
+    color: var(--primary);
+}
+
+td { 
+    padding: 10px; 
+    border-bottom: 1px solid #eee; 
+    text-align: center; 
+}
+
+/* Resaltado al pasar el ratón para no perderse */
+tbody tr:hover {
+    background-color: #fcfcfc;
+}
+
+/* 4. INPUTS Y BOTÓN */
 input[type="number"] {
     width: 50px;
-    padding: 5px;
+    padding: 6px;
     text-align: center;
     border: 1px solid #ccc;
     border-radius: 4px;
+    outline-color: var(--accent);
 }
 
 button {
     display: block;
     width: 100%;
+    max-width: 800px; /* Alineado con el ancho de la tabla */
     padding: 15px;
-    background: #34495e;
+    background: var(--accent);
     color: white;
     border: none;
     border-radius: 8px;
     font-size: 1.1rem;
+    font-weight: bold;
     cursor: pointer;
-    transition: 0.3s;
-    margin-bottom: 20px;
+    transition: background 0.3s ease;
+    margin: 20px auto 40px auto;
 }
 
-button:hover { background: #1a252f; }
+button:hover { 
+    background: #1a252f; 
+}
 
-/* SECCIÓN DE RESULTADOS CENTRADA */
+/* 5. SECCIÓN DE RESULTADOS (CENTRADA) */
+hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 40px 0;
+}
+
 .results-grid {
     display: flex;
     flex-direction: column;
-    align-items: center;    /* Centra la tabla y la gráfica horizontalmente */
+    align-items: center; /* Centra tabla de resultados y gráfica */
     gap: 40px;
     width: 100%;
 }
 
 .table-wrapper {
     width: 100%;
-    max-width: 700px;       /* Evita que la tabla de resultados sea demasiado ancha */
+    max-width: 700px; /* Tabla de resultados aún más compacta */
 }
 
 .chart-wrapper {
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;    /* Centra el título "Visualización de Datos" */
+    align-items: center;
 }
 
+/* 6. GRÁFICA ALARGADA Y CENTRADA */
 .chart-container {
     position: relative;
-    width: 100%;            /* Ocupa el ancho disponible del wrapper */
-    max-width: 800px;       /* Ancho máximo de la gráfica */
-    height: 350px;          /* Altura fija para efecto alargado */
-    margin: 20px auto;      /* Centrado automático */
-}
-
-/* Estilo para el mensaje de espera */
-#mensaje-espera {
-    margin: 40px 0;
-    font-weight: normal;
-    font-style: italic;
-}
+    width: 100%;
+    max-width: 850px; /* Tamaño ideal para la gráfica */
+    height
