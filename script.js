@@ -1,8 +1,6 @@
 /*************************************************
  * DEFINICIÓN DE LOS ÍTEMS (36)
- * Equivalente exacto a la tabla del Excel
  *************************************************/
-
 const items = [
   {id:1, categoria:"ESPECIAS", objetivo:"canela", condicion:"nrp"},
   {id:2, categoria:"ANIMALES", objetivo:"caballo", condicion:"rp-"},
@@ -43,9 +41,8 @@ const items = [
 ];
 
 /*************************************************
- * GENERACIÓN AUTOMÁTICA DE LA TABLA
+ * GENERAR TABLA DE ENTRADA
  *************************************************/
-
 const tbody = document.getElementById("tabla-items");
 
 items.forEach((item, index) => {
@@ -56,118 +53,92 @@ items.forEach((item, index) => {
     <td>${item.objetivo}</td>
     <td>${item.condicion}</td>
     <td>
-      <input 
-        type="number" 
-        min="0" 
-        max="1" 
-        step="1"
-        id="resp-${index}"
-      >
+      <input type="number" min="0" max="1" step="1" id="resp-${index}">
     </td>
   `;
   tbody.appendChild(row);
 });
 
 /*************************************************
- * PROCESAMIENTO DE RESULTADOS
+ * PROCESAR RESULTADOS
  *************************************************/
-
 let chart = null;
 
 function procesar() {
-  const resultados = {
-    "nrp": 0,
-    "rp-": 0,
-    "rp+": 0
-  };
+  const resultados = { "nrp":0, "rp-":0, "rp+":0 };
+  const totalItems = { "nrp":0, "rp-":0, "rp+":0 };
 
-  // Validación y conteo
-  for (let i = 0; i < items.length; i++) {
-    const valor = Number(document.getElementById(`resp-${i}`).value);
-
+  // Contar aciertos y total por condición
+  items.forEach((item, index) => {
+    const valor = Number(document.getElementById(`resp-${index}`).value);
     if (valor !== 0 && valor !== 1) {
       alert("Todas las casillas deben contener únicamente 0 o 1.");
-      return;
+      throw new Error("Entrada inválida");
     }
 
-    if (valor === 1) {
-      resultados[items[i].condicion]++;
-    }
-  }
+    totalItems[item.condicion]++;
+    if (valor === 1) resultados[item.condicion]++;
+  });
 
   // Determinar condición predominante
-  const condicionFinal = Object.keys(resultados).reduce((a, b) =>
-    resultados[a] >= resultados[b] ? a : b
-  );
+  const condicionFinal = Object.keys(resultados).reduce((a,b) => resultados[a]>=resultados[b]?a:b);
+  document.getElementById("condicionFinal").innerText = "Condición predominante: " + condicionFinal;
 
-  document.getElementById("condicionFinal").innerText =
-    "Condición predominante: " + condicionFinal;
-
-  dibujarGrafica(resultados);
+  dibujarGrafica(resultados, totalItems);
+  generarTablaResultados(resultados, totalItems);
 }
 
 /*************************************************
- * GRÁFICA DE BARRAS (Chart.js)
+ * DIBUJAR GRÁFICA SOBRE PORCENTAJES
  *************************************************/
-
-function dibujarGrafica(resultados) {
+function dibujarGrafica(resultados, totalItems) {
   const ctx = document.getElementById("grafica").getContext("2d");
+  if(chart) chart.destroy();
 
-  if (chart) {
-    chart.destroy();
-  }
-
-  // Datos para la gráfica
-  const etiquetas = ["nrp", "rp-", "rp+"];
-  const colores = ["blue", "red", "green"]; // NRP azul, RP- rojo, RP+ verde
-  const datos = [resultados["nrp"], resultados["rp-"], resultados["rp+"]];
+  const etiquetas = ["Practicados", "No practicados", "Relacionados pero NP"];
+  const colores = ["green","red","blue"];
+  const data = [
+    Math.round((resultados["rp+"]/totalItems["rp+"])*100),
+    Math.round((resultados["rp-"]/totalItems["rp-"])*100),
+    Math.round((resultados["nrp"]/totalItems["nrp"])*100)
+  ];
 
   chart = new Chart(ctx, {
-    type: "bar",
-    data: {
+    type:"bar",
+    data:{
       labels: etiquetas,
-      datasets: [{
-        label: "Número de aciertos",
-        data: datos,
+      datasets:[{
+        label:"% Recuerdo",
+        data: data,
         backgroundColor: colores
       }]
     },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true,
-          precision: 0
-        }
+    options:{
+      responsive:true,
+      scales:{
+        y:{ beginAtZero:true, max:100, ticks:{ stepSize:10 } }
       }
     }
   });
+}
 
-  // Generar tabla de resultados
-  const tabla = document.getElementById("tabla-resultados").querySelector("tbody");
-  tabla.innerHTML = ""; // Limpiar tabla anterior
+/*************************************************
+ * GENERAR TABLA DE RESULTADOS
+ *************************************************/
+function generarTablaResultados(resultados, totalItems) {
+  const tbodyRes = document.getElementById("tabla-resultados").querySelector("tbody");
+  tbodyRes.innerHTML = "";
 
-  // Total de ítems por condición
-  const totalItems = {
-    "nrp": items.filter(i => i.condicion === "nrp").length,
-    "rp-": items.filter(i => i.condicion === "rp-").length,
-    "rp+": items.filter(i => i.condicion === "rp+").length
-  };
+  const nombresCondicion = { "rp+":"Practicados", "rp-":"No practicados", "nrp":"Relacionados pero NP" };
 
-  const nombresCondicion = {
-    "nrp": "Relacionados pero NP",
-    "rp-": "No practicados",
-    "rp+": "Practicados"
-  };
-
-  ["rp+", "rp-", "nrp"].forEach(c => {
-    const porcentaje = Math.round((resultados[c] / totalItems[c]) * 100);
+  ["rp+","rp-","nrp"].forEach(c => {
+    const porcentaje = Math.round((resultados[c]/totalItems[c])*100);
     const fila = document.createElement("tr");
     fila.innerHTML = `
       <td>${nombresCondicion[c]}</td>
       <td>${porcentaje}%</td>
       <td>${resultados[c]}</td>
     `;
-    tabla.appendChild(fila);
+    tbodyRes.appendChild(fila);
   });
 }
