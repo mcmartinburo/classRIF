@@ -44,6 +44,8 @@ const items = [
  * FUNCION PARA GENERAR LA TABLA DE ÍTEMS
  *************************************************/
 function generarTablaItems() {
+// Generar tabla de ítems cuando la página termine de cargar
+window.onload = function() {
   const tbody = document.getElementById("tabla-items");
   if (!tbody) {
     console.error("No se encuentra el tbody de tabla-items");
@@ -57,11 +59,13 @@ function generarTablaItems() {
       <td>${item.categoria}</td>
       <td>${item.objetivo}</td>
       <td>${item.condicion}</td>
-      <td><input type="number" min="0" max="1" step="1" id="resp-${index}"></td>
+      <td>
+        <input type="number" min="0" max="1" step="1" id="resp-${index}">
+      </td>
     `;
     tbody.appendChild(row);
   });
-}
+};
 
 // Generar la tabla inmediatamente al cargar el script
 generarTablaItems();
