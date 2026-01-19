@@ -57,8 +57,8 @@ function renderizarTablaItems() {
 }
 
 function procesar() {
-    const resultados = { "rp+": 0, "rp-": 0, "nrp": 0 };
-    const totales = { "rp+": 0, "rp-": 0, "nrp": 0 };
+    const resultados = { "rp+": 0, "nrp": 0, "rp-": 0 };
+    const totales = { "rp+": 0, "nrp": 0, "rp-": 0  };
 
     items.forEach((item, index) => {
         const valor = Number(document.getElementById(`resp-${index}`).value) || 0;
