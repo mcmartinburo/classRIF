@@ -41,14 +41,13 @@ const items = [
 ];
 
 /*************************************************
- * GENERAR TABLA DE ÍTEMS
+ * GENERAR TABLA DE ÍTEMS AL CARGAR
  *************************************************/
-window.onload = function() {
+function inicializarTabla() {
   const tbody = document.getElementById("tabla-items");
-  if (!tbody) {
-    console.error("No se encuentra el tbody de tabla-items");
-    return;
-  }
+  if (!tbody) return;
+
+  tbody.innerHTML = ""; // Limpiar por si acaso
 
   items.forEach((item, index) => {
     const row = document.createElement("tr");
@@ -58,12 +57,15 @@ window.onload = function() {
       <td>${item.objetivo}</td>
       <td>${item.condicion}</td>
       <td>
-        <input type="number" min="0" max="1" step="1" id="resp-${index}">
+        <input type="number" min="0" max="1" step="1" id="resp-${index}" value="0">
       </td>
     `;
     tbody.appendChild(row);
   });
-};
+}
+
+// Ejecutar cuando el HTML esté listo
+document.addEventListener("DOMContentLoaded", inicializarTabla);
 
 /*************************************************
  * PROCESAR RESULTADOS
@@ -71,87 +73,83 @@ window.onload = function() {
 let chart = null;
 
 function procesar() {
-  const resultados = { "nrp":0, "rp-":0, "rp+":0 };
-  const totalItems = { "nrp":0, "rp-":0, "rp+":0 };
+  const resultados = { "nrp": 0, "rp-": 0, "rp+": 0 };
+  const totalItems = { "nrp": 0, "rp-": 0, "rp+": 0 };
 
-  // Contar aciertos y totales
-  items.forEach((item, index) => {
-    const valor = Number(document.getElementById(`resp-${index}`).value);
-    if (valor !== 0 && valor !== 1) {
-      alert("Todas las casillas deben contener únicamente 0 o 1.");
-      throw new Error("Entrada inválida");
-    }
-    totalItems[item.condicion]++;
-    if (valor === 1) resultados[item.condicion]++;
-  });
+  try {
+    items.forEach((item, index) => {
+      const input = document.getElementById(`resp-${index}`);
+      const valor = Number(input.value);
 
-  // Condición predominante
-  const condicionFinal = Object.keys(resultados).reduce((a,b) => resultados[a]>=resultados[b]?a:b);
-  document.getElementById("condicionFinal").innerText = "Condición predominante: " + condicionFinal;
+      if (isNaN(valor) || (valor !== 0 && valor !== 1)) {
+        alert(`Error en el ítem ${item.id}: Solo se permite 0 o 1.`);
+        throw new Error("Entrada inválida");
+      }
 
-  // Generar tabla de resultados
-  generarTablaResultados(resultados, totalItems);
+      totalItems[item.condicion]++;
+      if (valor === 1) resultados[item.condicion]++;
+    });
 
-  // Generar gráfica
-  dibujarGrafica(resultados, totalItems);
+    const condicionFinal = Object.keys(resultados).reduce((a, b) => 
+      (resultados[a] / totalItems[a]) >= (resultados[b] / totalItems[b]) ? a : b
+    );
+    
+    document.getElementById("condicionFinal").innerText = "Condición con mejor recuerdo: " + condicionFinal;
+
+    generarTablaResultados(resultados, totalItems);
+    dibujarGrafica(resultados, totalItems);
+
+  } catch (e) {
+    console.error(e);
+  }
 }
 
-/*************************************************
- * GENERAR TABLA DE RESULTADOS
- *************************************************/
 function generarTablaResultados(resultados, totalItems) {
   const tbodyRes = document.getElementById("tabla-resultados").querySelector("tbody");
   tbodyRes.innerHTML = "";
 
-  const nombresCondicion = { "rp+":"Practicados", "rp-":"No practicados", "nrp":"Relacionados pero NP" };
+  const nombresCondicion = { "rp+": "Practicados (RP+)", "rp-": "No practicados (RP-)", "nrp": "Relacionados pero NP (NRP)" };
 
-  ["rp+","rp-","nrp"].forEach(c => {
-    const porcentaje = Math.round((resultados[c]/totalItems[c])*100);
+  ["rp+", "rp-", "nrp"].forEach(c => {
+    const porcentaje = Math.round((resultados[c] / totalItems[c]) * 100) || 0;
     const fila = document.createElement("tr");
     fila.innerHTML = `
       <td>${nombresCondicion[c]}</td>
       <td>${porcentaje}%</td>
-      <td>${resultados[c]}</td>
+      <td>${resultados[c]} de ${totalItems[c]}</td>
     `;
     tbodyRes.appendChild(fila);
   });
 }
 
-/*************************************************
- * DIBUJAR GRÁFICA SOBRE PORCENTAJES
- *************************************************/
 function dibujarGrafica(resultados, totalItems) {
   const ctx = document.getElementById("grafica").getContext("2d");
-  if(chart) chart.destroy();
+  if (chart) chart.destroy();
 
-  const etiquetas = ["Practicados", "No practicados", "Relacionados pero NP"];
-  const colores = ["green","red","blue"];
   const data = [
-    Math.round((resultados["rp+"]/totalItems["rp+"])*100),
-    Math.round((resultados["rp-"]/totalItems["rp-"])*100),
-    Math.round((resultados["nrp"]/totalItems["nrp"])*100)
+    Math.round((resultados["rp+"] / totalItems["rp+"]) * 100) || 0,
+    Math.round((resultados["rp-"] / totalItems["rp-"]) * 100) || 0,
+    Math.round((resultados["nrp"] / totalItems["nrp"]) * 100) || 0
   ];
 
   chart = new Chart(ctx, {
-    type:"bar",
-    data:{
-      labels: etiquetas,
-      datasets:[{
-        label:"% de recuerdo",
+    type: "bar",
+    data: {
+      labels: ["Practicados", "No practicados", "Relacionados (NRP)"],
+      datasets: [{
+        label: "% de recuerdo",
         data: data,
-        backgroundColor: colores
+        backgroundColor: ["#4CAF50", "#F44336", "#2196F3"]
       }]
     },
-    options:{
-      responsive:true,
-      scales:{
-        y:{
-          beginAtZero:true,
-          max:100,
-          ticks:{ stepSize:10 },
-          title:{ display:true, text:"% de recuerdo" }
-        }
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true, max: 100 }
       }
+    }
+  });
+}
     }
   });
 }
