@@ -1,41 +1,82 @@
+/* Configuración General */
+:root {
+    --primary-color: #2c3e50;
+    --accent-color: #3498db;
+    --success-color: #2ecc71;
+    --danger-color: #e74c3c;
+    --bg-color: #f4f7f6;
+    --text-color: #333;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
 }
 
 .container {
-  max-width: 1000px;
-  margin: 30px auto;
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
+h1, h2 {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--bg-color);
+    padding-bottom: 10px;
+}
+
+/* Estilo de Tablas */
 table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.95em;
 }
 
-th, td {
-  border: 1px solid #ccc;
-  padding: 6px;
-  text-align: center;
+table th {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px;
+    text-align: left;
 }
 
-th {
-  background-color: #eaeaea;
+table td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
 }
 
-input {
-  width: 40px;
-  text-align: center;
+table tr:hover {
+    background-color: #f9f9f9;
 }
 
+/* Inputs de número */
+input[type="number"] {
+    width: 50px;
+    padding: 8px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+}
+
+input[type="number"]:focus {
+    border-color: var(--accent-color);
+    outline: none;
+}
+
+/* Botón Principal */
 button {
-  margin: 20px auto;
-  display: block;
-  padding: 10px 30px;
-  font-size: 16px;
-  cursor: pointer;
-}
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 30px auto;
+    padding: 15px;
+    background-color: var(--success-color);
+    color:
