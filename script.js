@@ -41,7 +41,7 @@ const items = [
 ];
 
 /*************************************************
- * GENERAR TABLA DE ENTRADA
+ * GENERAR TABLA DE ENTRADA AL CARGAR PÁGINA
  *************************************************/
 const tbody = document.getElementById("tabla-items");
 
@@ -66,6 +66,7 @@ function procesar() {
   const resultados = { "nrp":0, "rp-":0, "rp+":0 };
   const totalItems = { "nrp":0, "rp-":0, "rp+":0 };
 
+  // Contar aciertos y total por condición
   items.forEach((item, index) => {
     const valor = Number(document.getElementById(`resp-${index}`).value);
     if (valor !== 0 && valor !== 1) {
@@ -76,9 +77,22 @@ function procesar() {
     if (valor === 1) resultados[item.condicion]++;
   });
 
-  const condicionFinal = Object
+  // Condición predominante
+  const condicionFinal = Object.keys(resultados).reduce((a,b) => resultados[a]>=resultados[b]?a:b);
+  document.getElementById("condicionFinal").innerText = "Condición predominante: " + condicionFinal;
 
-
-    tbodyRes.appendChild(fila);
-  });
+  // Primero tabla de resultados
+  generarTablaResultados(resultados, totalItems);
+  // Después la gráfica
+  dibujarGrafica(resultados, totalItems);
 }
+
+/*************************************************
+ * GENERAR TABLA DE RESULTADOS
+ *************************************************/
+function generarTablaResultados(resultados, totalItems) {
+  const tbodyRes = document.getElementById("tabla-resultados").querySelector("tbody");
+  tbodyRes.innerHTML = "";
+  const nombresCondicion = { "rp+":"Practicados", "rp-":"No practicados", "nrp":"Relacionados pero NP" };
+
+  ["r]()
