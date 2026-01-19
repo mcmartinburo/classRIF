@@ -37,3 +37,74 @@ const items = [
   {id:36, categoria:"PROFESIONES", objetivo:"jardinero", condicion:"rp+"}
 ];
 
+const tbody = document.getElementById("tabla-items");
+
+items.forEach((item, index) => {
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td>${item.id}</td>
+    <td>${item.categoria}</td>
+    <td>${item.objetivo}</td>
+    <td>${item.condicion}</td>
+    <td><input type="number" min="0" max="1" id="resp-${index}"></td>
+  `;
+  tbody.appendChild(row);
+});
+
+let chart = null;
+
+function procesar() {
+  const resultados = { "nrp": 0, "rp-": 0, "rp+": 0 };
+
+  items.forEach((item, index) => {
+    const valor = Number(document.getElementById(`resp-${index}`).value);
+
+    if (valor !== 0 && valor !== 1) {
+      alert("Todas las casillas deben contener 0 o 1.");
+      throw new Error("Entrada inválida");
+    }
+
+    if (valor === 1) {
+      resultados[item.condicion]++;
+    }
+  });
+
+  const condicionFinal = Object.keys(resultados).reduce((a, b) =>
+    resultados[a] >= resultados[b] ? a : b
+  );
+
+  document.getElementById("condicionFinal").innerText =
+    "Condición predominante: " + condicionFinal;
+
+  dibujarGrafica(resultados);
+}
+
+function dibujarGrafica(resultados) {
+  const ctx = document.getElementById("grafica").getContext("2d");
+
+  if (chart) chart.destroy();
+
+  chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["nrp", "rp-", "rp+"],
+      datasets: [{
+        label: "Número de aciertos",
+        data: [
+          resultados["nrp"],
+          resultados["rp-"],
+          resultados["rp+"]
+        ]
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          precision: 0
+        }
+      }
+    }
+  });
+}
+
