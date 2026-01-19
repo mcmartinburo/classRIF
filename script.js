@@ -57,8 +57,8 @@ function renderizarTablaItems() {
 }
 
 function procesar() {
-    const resultados = { "rp+": 0, "nrp": 0, "rp-": 0 };
-    const totales = { "rp+": 0, "nrp": 0, "rp-": 0  };
+    const resultados = { "rp+": 0, "rp-": 0, "nrp": 0 };
+    const totales = { "rp+": 0, "rp-": 0, "nrp": 0 };
 
     items.forEach((item, index) => {
         const valor = Number(document.getElementById(`resp-${index}`).value) || 0;
@@ -107,16 +107,18 @@ function dibujarGrafica(res, tot, orden) {
     const ctx = document.getElementById("grafica").getContext("2d");
     if (chart) chart.destroy();
 
-    const datosPorcentaje = orden.map(c => (res[c] / tot[c]) * 100 || 0);
+    const etiquetas = ["Practicados", "No practicados", "Relacionados"];
+    const datos = orden.map(c => (res[c]/tot[c])*100 || 0);
 
     chart = new Chart(ctx, {
         type: "bar",
         data: {
-            labels: ["Practicados (RP+)", "No Practicados (RP-)", "Relacionados (NRP)"],
+            labels: etiquetas,
             datasets: [{
-                label: "% de Recuerdo",
-                data: datosPorcentaje,
-                backgroundColor: ["#A8E6CF", "#AEC6EF", "#FF8B94"], 
+                label: "% de recuerdo",
+                data: datos,
+                backgroundColor: ["#A8E6CF", "#AEC6EF", "#FF8B94"], // VERDE, AZUL, ROJO PASTEL
+                borderColor: ["#8ED1B7", "#95AEDA", "#E57881"],
                 borderWidth: 1
             }]
         },
@@ -124,35 +126,15 @@ function dibujarGrafica(res, tot, orden) {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-                y: { 
-                    beginAtZero: true, 
-                    max: 100,
-                    // AQUÍ AÑADIMOS LA ETIQUETA DEL EJE Y
-                    title: {
-                        display: true,
-                        text: '% de Recuerdo',
-                        color: '#2c3e50',
-                        font: {
-                            size: 14,
-                            weight: 'bold',
-                            family: 'Segoe UI'
-                        }
-                    },
-                    ticks: {
-                        callback: function(value) {
-                            return value + "%"; // Mantiene el símbolo de porcentaje en los números
-                        }
-                    }
-                }
+                y: { beginAtZero: true, max: 100, ticks: { callback: v => v + "%" } }
             },
-            plugins: {
-                legend: {
-                    display: false // Ocultamos la leyenda superior para que no se repita
-                }
-            }
+            plugins: { legend: { display: false } }
         }
     });
 }
+
+// Inicialización
+window.onload = renderizarTablaItems;
 
 // Inicialización
 window.onload = renderizarTablaItems;
