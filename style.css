@@ -1,7 +1,10 @@
+/* 1. VARIABLES Y CONFIGURACIÓN BASE */
 :root {
     --bg: #f4f7f6;
     --primary: #2c3e50;
     --white: #ffffff;
+    --accent: #34495e;
+    --border: #dee2e6;
 }
 
 body {
@@ -13,6 +16,7 @@ body {
     justify-content: center;
 }
 
+/* 2. CONTENEDOR PRINCIPAL */
 .container {
     width: 100%;
     max-width: 1000px;
@@ -20,18 +24,77 @@ body {
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra todo el contenido */
 }
 
-h1, h2 { color: var(--primary); text-align: center; }
+h1, h2 { 
+    color: var(--primary); 
+    text-align: center;
+    width: 100%;
+}
+
+/* 3. TABLAS Y BOTÓN (ESTRECHOS Y CENTRADOS) */
+/* Aplicamos un ancho máximo de 750px para que sean más estrechos que el contenedor */
+table, button {
+    width: 95%;
+    max-width: 750px; 
+    margin: 20px auto;
+}
 
 table {
-    width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
 }
 
-th { background: #eee; padding: 12px; border-bottom: 2px solid #ddd; }
+th { background: #f8f9fa; padding: 12px; border-bottom: 2px solid var(--border); }
 td { padding: 10px; border-bottom: 1px solid #eee; text-align: center; }
+
+button {
+    display: block;
+    padding: 15px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover { background: #1a252f; }
+
+/* 4. RESULTADOS Y GRÁFICA */
+.results-grid {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+.table-wrapper, .chart-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 5. CONTENEDOR DE LA GRÁFICA (CENTRADO DEFINITIVO) */
+.chart-container {
+    position: relative;
+    width: 95%;
+    max-width: 750px; /* Igual que la tabla para simetría */
+    height: 400px;    /* Aumentado para asegurar visibilidad */
+    margin: 0 auto !important;
+}
+
+/* Asegura que el canvas ocupe su lugar */
+canvas#grafica {
+    width: 100% !important;
+    height: 100% !important;
+}
 
 input[type="number"] {
     width: 50px;
@@ -41,31 +104,8 @@ input[type="number"] {
     border-radius: 4px;
 }
 
-button {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    background: #34495e;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-button:hover { background: #1a252f; }
-
-/* GRÁFICA ALARGADA */
-.chart-container {
-    position: relative;
-    width: 100%;
-    height: 300px; /* Altura fija para efecto alargado */
-    margin: 20px 0;
-}
-
-.results-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
+#mensaje-espera {
+    margin: 30px 0;
+    color: #7f8c8d;
+    font-style: italic;
 }
