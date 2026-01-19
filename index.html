@@ -4,29 +4,33 @@
   <meta charset="UTF-8">
   <title>Análisis de resultados</title>
   <link rel="stylesheet" href="style.css">
-
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-  <div class="container">
-    <h1>Análisis de resultados</h1>
+<div class="container">
+  <h1>Análisis de resultados</h1>
+  <p>Introduce <strong>1</strong> si la respuesta es correcta o <strong>0</strong> si es incorrecta.</p>
 
-    <p>
-      Introduce tus respuestas usando solo <strong>1</strong> (acierto) y
-      <strong>0</strong> (error), separadas por comas.
-    </p>
+  <table>
+    <thead>
+      <tr>
+        <th>Ítem</th>
+        <th>Categoría</th>
+        <th>Objetivo</th>
+        <th>Condición</th>
+        <th>¿Correcto?</th>
+      </tr>
+    </thead>
+    <tbody id="tabla-items"></tbody>
+  </table>
 
-    <textarea id="respuestas" placeholder="Ejemplo: 1,0,1,0,1,0..." rows="4"></textarea>
+  <button onclick="procesar()">Ver resultado</button>
 
-    <button onclick="procesar()">Ver resultado</button>
+  <h2 id="condicionFinal"></h2>
+  <canvas id="grafica"></canvas>
+</div>
 
-    <h2 id="condicionFinal"></h2>
-
-    <canvas id="grafica"></canvas>
-  </div>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
