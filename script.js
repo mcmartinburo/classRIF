@@ -49,7 +49,8 @@ function renderizarTablaItems() {
       <td>${item.id}</td>
       <td>${item.categoria}</td>
       <td>${item.objetivo}</td>
-      <td><input type="number" min="0" max="1" id="resp-${index}" value="0"></td> <td><strong>${item.condicion.toUpperCase()}</strong></td>
+      <td><input type="number" min="0" max="1" id="resp-${index}" value="0"></td>
+      <td><strong>${item.condicion.toUpperCase()}</strong></td>
     `;
     tbody.appendChild(row);
   });
@@ -59,48 +60,57 @@ function procesar() {
   const resultados = { "rp+": 0, "rp-": 0, "nrp": 0 };
   const totales = { "rp+": 0, "rp-": 0, "nrp": 0 };
 
+  // 1. Recopilar datos
   items.forEach((item, index) => {
     const valor = Number(document.getElementById(`resp-${index}`).value) || 0;
     totales[item.condicion]++;
     if (valor === 1) resultados[item.condicion]++;
   });
 
+  // 2. Definir Nombres y Orden Estricto
   const nombresLargo = { 
     "rp+": "Practicados", 
     "rp-": "No practicados", 
-    "nrp": "Relacionados pero No practicados" 
+    "nrp": "Relacionados pero no practicados" 
   };
+  const orden = ["rp+", "rp-", "nrp"];
 
+  // 3. Llenar tabla de resultados en el ORDEN CORRECTO
   const tbodyRes = document.querySelector("#tabla-resultados tbody");
   tbodyRes.innerHTML = "";
-  // ORDEN DE LA TABLA DE RESULTADOS: Practicados, No practicados, Relacionados
-  ["rp+", "rp-", "nrp"].forEach(c => {
+  orden.forEach(c => {
     const porc = Math.round((resultados[c] / totales[c]) * 100) || 0;
-    tbodyRes.innerHTML += `<tr><td>${nombresLargo[c]}</td><td>${porc}%</td><td>${resultados[c]}</td></tr>`;
+    tbodyRes.innerHTML += `
+      <tr>
+        <td>${nombresLargo[c]}</td>
+        <td>${porc}%</td>
+        <td>${resultados[c]} de ${totales[c]}</td>
+      </tr>`;
   });
 
-  const mejor = ["rp+", "rp-", "nrp"].reduce((a, b) => (resultados[a]/totales[a]) >= (resultados[b]/totales[b]) ? a : b);
+  // 4. Determinar predominante
+  const mejor = orden.reduce((a, b) => (resultados[a]/totales[a]) >= (resultados[b]/totales[b]) ? a : b);
   document.getElementById("condicionFinal").innerText = "Condición predominante: " + nombresLargo[mejor];
 
-  dibujarGrafica(resultados, totales);
+  // 5. Dibujar gráfica en el ORDEN CORRECTO
+  dibujarGrafica(resultados, totales, orden, nombresLargo);
 }
 
-function dibujarGrafica(res, tot) {
+function dibujarGrafica(res, tot, orden, nombres) {
   const ctx = document.getElementById("grafica").getContext("2d");
   if (chart) chart.destroy();
+
+  // Mapeamos los datos siguiendo el array 'orden'
+  const etiquetas = orden.map(c => (c === "nrp" ? "Relacionados" : nombres[c]));
+  const datos = orden.map(c => (res[c]/tot[c])*100 || 0);
 
   chart = new Chart(ctx, {
     type: "bar",
     data: {
-      // ORDEN DE LA GRÁFICA: Practicados, No practicados, Relacionados
-      labels: ["Practicados", "No practicados", "Relacionados pero No practicados"],
+      labels: etiquetas,
       datasets: [{
         label: "% de recuerdo",
-        data: [
-          (res["rp+"]/tot["rp+"])*100 || 0,
-          (res["rp-"]/tot["rp-"])*100 || 0,
-          (res["nrp"]/tot["nrp"])*100 || 0
-        ],
+        data: datos,
         backgroundColor: ["#2ecc71", "#e74c3c", "#3498db"]
       }]
     },
