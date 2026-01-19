@@ -68,7 +68,7 @@ function procesar() {
   const nombresLargo = { 
     "rp+": "Practicados", 
     "rp-": "No practicados", 
-    "nrp": "Relacionados pero no practicados" 
+    "nrp": "Relacionados pero No practicados" 
   };
 
   const tbodyRes = document.querySelector("#tabla-resultados tbody");
@@ -93,7 +93,7 @@ function dibujarGrafica(res, tot) {
     type: "bar",
     data: {
       // ORDEN DE LA GRÁFICA: Practicados, No practicados, Relacionados
-      labels: ["Practicados", "No practicados", "Relacionados"],
+      labels: ["Practicados", "No practicados", "Relacionados pero No practicados"],
       datasets: [{
         label: "% de recuerdo",
         data: [
