@@ -100,19 +100,37 @@ function dibujarGrafica(res, tot, orden, nombres) {
       datasets: [{
         label: "% de recuerdo",
         data: datos,
+        // COLORES PASTEL SÓLIDOS (HEX):
+        // Verde Menta, Azul Cielo, Rojo Coral
         backgroundColor: [
-          "rgba(168, 230, 207, 0.8)", // Verde pastel
-          "rgba(174, 198, 239, 0.8)", // Azul pastel
-          "rgba(255, 139, 148, 0.8)"  // Rojo pastel
+          "#A8E6CF", 
+          "#AEC6EF", 
+          "#FF8B94"
         ],
         borderColor: [
-          "rgba(168, 230, 207, 1)",
-          "rgba(174, 198, 239, 1)",
-          "rgba(255, 139, 148, 1)"
+          "#8ED1B7",
+          "#95AEDA",
+          "#E57881"
         ],
         borderWidth: 1
       }]
     },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100,
+          ticks: { callback: (v) => v + "%" }
+        }
+      },
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  });
+}
     options: {
       responsive: true,
       maintainAspectRatio: false,
