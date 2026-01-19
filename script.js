@@ -113,10 +113,10 @@ function dibujarGrafica(res, tot, orden) {
         type: "bar",
         data: {
             // Aseguramos que las etiquetas coincidan con el orden de los datos
-            labels: ["Practicados (RP+)", "Relacionados (NRP)", "No Practicados (RP-)"],
+            labels: ["Practicados (RP+)", "No Practicados (NRP)", "Relacionados (RP-)"],
             datasets: [{
                 data: datosPorcentaje,
-                backgroundColor: ["#A8E6CF", "#FF8B94", "#AEC6EF"], // RP+ (Verde), NRP (Rojo), RP- (Azul)
+                backgroundColor: ["#A8E6CF", "#AEC6EF", "#FF8B94"], // RP+ (Verde), NRP (Azul), RP- (Rojo)
                 borderWidth: 1
             }]
         },
