@@ -5,62 +5,67 @@
 }
 
 body {
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg);
     margin: 0;
     padding: 20px;
+    display: flex;
+    justify-content: center;
 }
 
 .container {
+    width: 100%;
     max-width: 1000px;
-    margin: 0 auto;
     background: var(--white);
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
-h1, h2 { text-align: center; color: var(--primary); }
+h1, h2 { color: var(--primary); text-align: center; }
 
-/* TABLA DE ENTRADA ESTRECHA Y CENTRADA */
 table {
     width: 100%;
-    max-width: 750px;
-    margin: 20px auto;
     border-collapse: collapse;
+    margin: 20px 0;
 }
 
 th { background: #eee; padding: 12px; border-bottom: 2px solid #ddd; }
 td { padding: 10px; border-bottom: 1px solid #eee; text-align: center; }
 
-input[type="number"] { width: 50px; text-align: center; }
+input[type="number"] {
+    width: 50px;
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
 
 button {
     display: block;
     width: 100%;
-    max-width: 750px;
-    margin: 20px auto;
     padding: 15px;
     background: #34495e;
     color: white;
     border: none;
     border-radius: 8px;
-    cursor: pointer;
     font-size: 1.1rem;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-/* GRÁFICA */
+button:hover { background: #1a252f; }
+
+/* GRÁFICA ALARGADA */
 .chart-container {
     position: relative;
-    height: 350px;
     width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
+    height: 300px; /* Altura fija para efecto alargado */
+    margin: 20px 0;
 }
 
 .results-grid {
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 30px;
 }
