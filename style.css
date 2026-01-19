@@ -1,4 +1,4 @@
-/* 1. VARIABLES Y CONFIGURACIÓN BASE */
+/* 1. CONFIGURACIÓN DE COLORES Y BASE */
 :root {
     --bg: #f4f7f6;
     --primary: #2c3e50;
@@ -16,7 +16,7 @@ body {
     justify-content: center;
 }
 
-/* 2. CONTENEDOR PRINCIPAL */
+/* 2. CONTENEDOR PRINCIPAL (EL RECUADRO BLANCO) */
 .container {
     width: 100%;
     max-width: 1000px;
@@ -24,25 +24,25 @@ body {
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Fuerza el centrado de todos los hijos directos */
 }
 
 h1, h2 { 
     color: var(--primary); 
-    text-align: center; 
-}
-
-/* 3. TABLA DE ENTRADA (MÁS ESTRECHA Y CENTRADA) */
-.data-entry {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centra la tabla y el botón */
-}
-
-table {
+    text-align: center;
     width: 100%;
-    max-width: 800px; /* Tabla más estrecha que el contenedor (1000px) */
+    margin-bottom: 20px;
+}
+
+/* 3. TABLAS (ENTRADA Y RESULTADOS) */
+/* He igualado el max-width a 750px para que sea más estrecha que el fondo */
+table {
+    width: 95%;
+    max-width: 750px; 
     border-collapse: collapse;
-    margin: 20px auto;
+    margin: 20px auto;      /* Centrado horizontal crítico */
     background-color: var(--white);
 }
 
@@ -50,7 +50,6 @@ th {
     background: #f8f9fa; 
     padding: 12px; 
     border-bottom: 2px solid var(--border); 
-    color: var(--primary);
 }
 
 td { 
@@ -59,25 +58,11 @@ td {
     text-align: center; 
 }
 
-/* Resaltado al pasar el ratón para no perderse */
-tbody tr:hover {
-    background-color: #fcfcfc;
-}
-
-/* 4. INPUTS Y BOTÓN */
-input[type="number"] {
-    width: 50px;
-    padding: 6px;
-    text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    outline-color: var(--accent);
-}
-
+/* 4. BOTÓN DE PROCESAR */
 button {
     display: block;
-    width: 100%;
-    max-width: 800px; /* Alineado con el ancho de la tabla */
+    width: 95%;
+    max-width: 750px;       /* Alineado con el ancho de las tablas */
     padding: 15px;
     background: var(--accent);
     color: white;
@@ -90,40 +75,52 @@ button {
     margin: 20px auto 40px auto;
 }
 
-button:hover { 
-    background: #1a252f; 
-}
+button:hover { background: #1a252f; }
 
-/* 5. SECCIÓN DE RESULTADOS (CENTRADA) */
-hr {
-    border: 0;
-    border-top: 1px solid #eee;
-    margin: 40px 0;
-}
-
+/* 5. SECCIÓN DE RESULTADOS */
 .results-grid {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra tabla de resultados y gráfica */
+    align-items: center;    /* Centra los wrappers de tabla y gráfica */
     gap: 40px;
-    width: 100%;
 }
 
-.table-wrapper {
-    width: 100%;
-    max-width: 700px; /* Tabla de resultados aún más compacta */
-}
-
-.chart-wrapper {
+.table-wrapper, .chart-wrapper {
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center;    /* Centra los h2 y el contenido interno */
 }
 
-/* 6. GRÁFICA ALARGADA Y CENTRADA */
+/* 6. LA GRÁFICA (CENTRADO DEFINITIVO) */
 .chart-container {
     position: relative;
+    width: 95%;
+    max-width: 750px;       /* IGUAL que el max-width de la tabla */
+    height: 400px;          /* Altura para que se vea clara */
+    margin: 0 auto !important; /* Fuerza el centrado horizontal */
+}
+
+/* Estilos extra de limpieza */
+input[type="number"] {
+    width: 50px;
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#mensaje-espera {
+    margin: 30px 0;
+    color: #7f8c8d;
+    font-style: italic;
+    text-align: center;
+}
+
+hr {
     width: 100%;
-    max-width: 850px; /* Tamaño ideal para la gráfica */
-    height
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 20px 0;
+}
