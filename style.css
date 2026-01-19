@@ -83,7 +83,7 @@ button:hover { background: #1a252f; }
 
 .chart-container {
     position: relative;
-    width: 70%;            /* Ocupa el ancho disponible del wrapper */
+    width: 100%;            /* Ocupa el ancho disponible del wrapper */
     max-width: 800px;       /* Ancho máximo de la gráfica */
     height: 350px;          /* Altura fija para efecto alargado */
     margin: 20px auto;      /* Centrado automático */
