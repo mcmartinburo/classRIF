@@ -80,9 +80,6 @@ function procesar() {
         tbodyRes.innerHTML += `<tr><td>${nombresLargo[c]}</td><td>${porc}%</td><td>${resultados[c]} de ${totales[c]}</td></tr>`;
     });
 
-    const mejor = orden.reduce((a, b) => (resultados[a]/totales[a]) >= (resultados[b]/totales[b]) ? a : b);
-    document.getElementById("condicionFinal").innerText = "Condición predominante: " + nombresLargo[mejor];
-
     dibujarGrafica(resultados, totales, orden);
 }
 
