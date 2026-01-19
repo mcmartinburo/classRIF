@@ -1,3 +1,6 @@
+/*************************************************
+ * 1. DEFINICIÓN DE LOS ÍTEMS (36)
+ *************************************************/
 const items = [
   {id:1, categoria:"ESPECIAS", objetivo:"canela", condicion:"nrp"},
   {id:2, categoria:"ANIMALES", objetivo:"caballo", condicion:"rp-"},
@@ -32,34 +35,42 @@ const items = [
   {id:31, categoria:"FRUTAS", objetivo:"piña", condicion:"rp+"},
   {id:32, categoria:"ANIMALES", objetivo:"burro", condicion:"rp+"},
   {id:33, categoria:"PROFESIONES", objetivo:"veterinario", condicion:"rp+"},
-  {id:34, categoria:"ANIMALES", objetivo:"paloma", condicion:"rp+"},
+  {id:34, "¿Correcto?": "ANIMALES", objetivo:"paloma", condicion:"rp+"},
   {id:35, categoria:"ANIMALES", objetivo:"oveja", condicion:"rp+"},
   {id:36, categoria:"PROFESIONES", objetivo:"jardinero", condicion:"rp+"}
 ];
 
 let chart = null;
 
+// Función para renderizar la tabla con el orden de columnas pedido
 function renderizarTablaItems() {
   const tbody = document.getElementById("tabla-items");
   if (!tbody) return;
+
   tbody.innerHTML = "";
+
   items.forEach((item, index) => {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${item.id}</td>
       <td>${item.categoria}</td>
-      <td><input type="number" min="0" max="1" id="resp-${index}" value="0"></td> <td><strong>${item.condicion}</strong></td> <td>${item.objetivo}</td>
+      <td><input type="number" min="0" max="1" id="resp-${index}" value="0"></td> 
+      <td><strong>${item.condicion.toUpperCase()}</strong></td>
+      <td>${item.objetivo}</td>
     `;
     tbody.appendChild(row);
   });
 }
 
+// Función para procesar los cálculos
 function procesar() {
   const resultados = { "rp+": 0, "rp-": 0, "nrp": 0 };
   const totales = { "rp+": 0, "rp-": 0, "nrp": 0 };
 
   items.forEach((item, index) => {
-    const valor = Number(document.getElementById(`resp-${index}`).value) || 0;
+    const inputElement = document.getElementById(`resp-${index}`);
+    const valor = inputElement ? Number(inputElement.value) : 0;
+    
     totales[item.condicion]++;
     if (valor === 1) resultados[item.condicion]++;
   });
@@ -70,19 +81,26 @@ function procesar() {
     "nrp": "Relacionados pero no practicados" 
   };
 
+  // Llenar tabla de resultados
   const tbodyRes = document.querySelector("#tabla-resultados tbody");
-  tbodyRes.innerHTML = "";
-  ["rp+", "rp-", "nrp"].forEach(c => {
-    const porc = Math.round((resultados[c] / totales[c]) * 100) || 0;
-    tbodyRes.innerHTML += `<tr><td>${nombresLargo[c]}</td><td>${porc}%</td><td>${resultados[c]}</td></tr>`;
-  });
+  if (tbodyRes) {
+    tbodyRes.innerHTML = "";
+    ["rp+", "rp-", "nrp"].forEach(c => {
+      const porc = Math.round((resultados[c] / totales[c]) * 100) || 0;
+      tbodyRes.innerHTML += `<tr><td>${nombresLargo[c]}</td><td>${porc}%</td><td>${resultados[c]}</td></tr>`;
+    });
+  }
 
-  const mejor = ["rp+", "rp-", "nrp"].reduce((a, b) => (resultados[a]/totales[a]) >= (resultados[b]/totales[b]) ? a : b);
+  // Mejor condición
+  const mejor = ["rp+", "rp-", "nrp"].reduce((a, b) => 
+    (resultados[a]/totales[a]) >= (resultados[b]/totales[b]) ? a : b
+  );
   document.getElementById("condicionFinal").innerText = "Condición predominante: " + nombresLargo[mejor];
 
   dibujarGrafica(resultados, totales);
 }
 
+// Función de la gráfica alargada
 function dibujarGrafica(res, tot) {
   const ctx = document.getElementById("grafica").getContext("2d");
   if (chart) chart.destroy();
@@ -115,7 +133,8 @@ function dibujarGrafica(res, tot) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", renderizarTablaItems);
+// Única llamada al cargar la página
+window.onload = renderizarTablaItems;
 
 // LANZAR AL CARGAR
 document.addEventListener("DOMContentLoaded", renderizarTablaItems);
