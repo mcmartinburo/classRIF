@@ -79,6 +79,8 @@ function procesar() {
         const porc = Math.round((resultados[c] / totales[c]) * 100) || 0;
         tbodyRes.innerHTML += `<tr><td>${nombresLargo[c]}</td><td>${porc}%</td><td>${resultados[c]} de ${totales[c]}</td></tr>`;
     });
+    
+document.getElementById("titulo-espera").innerText = "Resultados del Análisis";
 
     dibujarGrafica(resultados, totales, orden);
 }
@@ -112,6 +114,9 @@ function dibujarGrafica(res, tot, orden) {
         }
     });
 }
+
+// Inicialización
+window.onload = renderizarTablaItems;
 
 // Inicialización
 window.onload = renderizarTablaItems;
