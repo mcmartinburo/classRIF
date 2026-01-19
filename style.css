@@ -1,4 +1,4 @@
-/* 1. CONFIGURACIÓN DE COLORES Y BASE */
+/* 1. VARIABLES Y CONFIGURACIÓN BASE */
 :root {
     --bg: #f4f7f6;
     --primary: #2c3e50;
@@ -16,7 +16,7 @@ body {
     justify-content: center;
 }
 
-/* 2. CONTENEDOR PRINCIPAL (EL RECUADRO BLANCO) */
+/* 2. CONTENEDOR PRINCIPAL */
 .container {
     width: 100%;
     max-width: 1000px;
@@ -26,23 +26,22 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     display: flex;
     flex-direction: column;
-    align-items: center; /* Fuerza el centrado de todos los hijos directos */
+    align-items: center; /* Centra todo el contenido hijo */
 }
 
 h1, h2 { 
     color: var(--primary); 
     text-align: center;
     width: 100%;
-    margin-bottom: 20px;
 }
 
 /* 3. TABLAS (ENTRADA Y RESULTADOS) */
-/* He igualado el max-width a 750px para que sea más estrecha que el fondo */
+/* Aplicamos el mismo estilo de centrado a ambas */
 table {
-    width: 95%;
-    max-width: 750px; 
+    width: 90%;             /* Ancho relativo */
+    max-width: 750px;       /* Ancho máximo para que sea "estrecha" */
     border-collapse: collapse;
-    margin: 20px auto;      /* Centrado horizontal crítico */
+    margin: 20px auto;      /* MARGEN AUTO PARA CENTRAR */
     background-color: var(--white);
 }
 
@@ -50,6 +49,7 @@ th {
     background: #f8f9fa; 
     padding: 12px; 
     border-bottom: 2px solid var(--border); 
+    color: var(--primary);
 }
 
 td { 
@@ -58,11 +58,11 @@ td {
     text-align: center; 
 }
 
-/* 4. BOTÓN DE PROCESAR */
+/* 4. BOTÓN CENTRADO */
 button {
     display: block;
-    width: 95%;
-    max-width: 750px;       /* Alineado con el ancho de las tablas */
+    width: 90%;
+    max-width: 750px;       /* Mismo ancho que las tablas */
     padding: 15px;
     background: var(--accent);
     color: white;
@@ -72,55 +72,38 @@ button {
     font-weight: bold;
     cursor: pointer;
     transition: background 0.3s ease;
-    margin: 20px auto 40px auto;
+    margin: 20px auto 40px auto; /* Centrado */
 }
 
 button:hover { background: #1a252f; }
 
-/* 5. SECCIÓN DE RESULTADOS */
+/* 5. SECCIÓN DE RESULTADOS (FORZAR CENTRADO) */
 .results-grid {
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;    /* Centra los wrappers de tabla y gráfica */
-    gap: 40px;
+    align-items: center;    /* Centra horizontalmente wrappers */
+    gap: 30px;
 }
 
 .table-wrapper, .chart-wrapper {
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;    /* Centra los h2 y el contenido interno */
+    align-items: center;    /* Centra los h2 y las tablas/gráficas */
 }
 
-/* 6. LA GRÁFICA (CENTRADO DEFINITIVO) */
+/* 6. GRÁFICA ALARGADA Y CENTRADA */
 .chart-container {
     position: relative;
-    width: 95%;
-    max-width: 750px;       /* IGUAL que el max-width de la tabla */
-    height: 400px;          /* Altura para que se vea clara */
-    margin: 0 auto !important; /* Fuerza el centrado horizontal */
-}
-
-/* Estilos extra de limpieza */
-input[type="number"] {
-    width: 50px;
-    padding: 5px;
-    text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    width: 95%;             /* Un poco más ancha que la tabla si quieres */
+    max-width: 850px; 
+    height: 400px;          /* Un poco más alta para que se vea mejor */
+    margin: 0 auto;
 }
 
 #mensaje-espera {
     margin: 30px 0;
     color: #7f8c8d;
     font-style: italic;
-    text-align: center;
-}
-
-hr {
-    width: 100%;
-    border: 0;
-    border-top: 1px solid #eee;
-    margin: 20px 0;
 }
