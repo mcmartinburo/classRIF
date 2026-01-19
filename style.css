@@ -4,28 +4,37 @@ body {
 }
 
 .container {
-  max-width: 700px;
-  margin: 40px auto;
+  max-width: 1000px;
+  margin: 30px auto;
   background: white;
-  padding: 25px;
+  padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-h1, h2 {
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 6px;
   text-align: center;
 }
 
-textarea {
-  width: 100%;
-  font-size: 16px;
-  padding: 10px;
-  margin-top: 10px;
+th {
+  background-color: #eaeaea;
+}
+
+input {
+  width: 40px;
+  text-align: center;
 }
 
 button {
-  display: block;
   margin: 20px auto;
+  display: block;
   padding: 10px 30px;
   font-size: 16px;
   cursor: pointer;
