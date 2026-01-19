@@ -84,9 +84,7 @@ function procesar() {
   const condicionFinal = Object.keys(resultados).reduce((a,b) => resultados[a]>=resultados[b]?a:b);
   document.getElementById("condicionFinal").innerText = "Condición predominante: " + condicionFinal;
 
-  // PRIMERO: generar tabla
   generarTablaResultados(resultados, totalItems);
-  // SEGUNDO: dibujar gráfica debajo
   dibujarGrafica(resultados, totalItems);
 }
 
@@ -146,7 +144,9 @@ function dibujarGrafica(resultados, totalItems) {
             display:true,
             text:"% de recuerdo"
           },
-          ticks:{ stepSize:10 }
+          ticks:{
+            stepSize:10
+          }
         }
       }
     }
