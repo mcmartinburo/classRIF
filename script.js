@@ -66,7 +66,11 @@ function procesar() {
         if (valor === 1) resultados[item.condicion]++;
     });
 
-    const nombresLargo = { "rp+": "Practicados", "rp-": "No practicados", "nrp": "Relacionados" };
+    const nombresLargo = { 
+        "rp+": "Practicados", 
+        "rp-": "No practicados", 
+        "nrp": "Relacionados pero no practicados" 
+    };
     const orden = ["rp+", "rp-", "nrp"];
 
     const tbodyRes = document.querySelector("#tabla-resultados tbody");
@@ -76,27 +80,27 @@ function procesar() {
         tbodyRes.innerHTML += `<tr><td>${nombresLargo[c]}</td><td>${porc}%</td><td>${resultados[c]} de ${totales[c]}</td></tr>`;
     });
 
-    // Quitar mensaje de espera
-    const msj = document.getElementById("mensaje-espera");
-    if (msj) msj.style.display = "none";
+    const mejor = orden.reduce((a, b) => (resultados[a]/totales[a]) >= (resultados[b]/totales[b]) ? a : b);
+    document.getElementById("condicionFinal").innerText = "Condición predominante: " + nombresLargo[mejor];
 
-    dibujarGrafica(resultados, totales, orden, nombresLargo);
+    dibujarGrafica(resultados, totales, orden);
 }
 
-function dibujarGrafica(res, tot, orden, nombres) {
+function dibujarGrafica(res, tot, orden) {
     const ctx = document.getElementById("grafica").getContext("2d");
     if (chart) chart.destroy();
 
+    const etiquetas = ["Practicados", "No practicados", "Relacionados"];
     const datos = orden.map(c => (res[c]/tot[c])*100 || 0);
 
     chart = new Chart(ctx, {
         type: "bar",
         data: {
-            labels: ["Practicados", "No practicados", "Relacionados"],
+            labels: etiquetas,
             datasets: [{
                 label: "% de recuerdo",
                 data: datos,
-                backgroundColor: ["#A8E6CF", "#AEC6EF", "#FF8B94"],
+                backgroundColor: ["#A8E6CF", "#AEC6EF", "#FF8B94"], // VERDE, AZUL, ROJO PASTEL
                 borderColor: ["#8ED1B7", "#95AEDA", "#E57881"],
                 borderWidth: 1
             }]
@@ -106,12 +110,11 @@ function dibujarGrafica(res, tot, orden, nombres) {
             maintainAspectRatio: false,
             scales: {
                 y: { beginAtZero: true, max: 100, ticks: { callback: v => v + "%" } }
-            }
+            },
+            plugins: { legend: { display: false } }
         }
     });
 }
-
-window.onload = renderizarTablaItems;
 
 // Inicialización
 window.onload = renderizarTablaItems;
