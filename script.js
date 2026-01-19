@@ -83,6 +83,8 @@ function procesar() {
 document.getElementById("titulo-espera").innerText = "Resultados del Análisis";
 
     dibujarGrafica(resultados, totales, orden);
+const mensaje = document.getElementById("mensaje-espera");
+if (mensaje) mensaje.style.display = "none";
 }
 
 function dibujarGrafica(res, tot, orden) {
