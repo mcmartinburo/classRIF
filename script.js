@@ -1,3 +1,8 @@
+/*************************************************
+ * DEFINICIÓN DE LOS ÍTEMS (36)
+ * Equivalente exacto a la tabla del Excel
+ *************************************************/
+
 const items = [
   {id:1, categoria:"ESPECIAS", objetivo:"canela", condicion:"nrp"},
   {id:2, categoria:"ANIMALES", objetivo:"caballo", condicion:"rp-"},
@@ -37,6 +42,10 @@ const items = [
   {id:36, categoria:"PROFESIONES", objetivo:"jardinero", condicion:"rp+"}
 ];
 
+/*************************************************
+ * GENERACIÓN AUTOMÁTICA DE LA TABLA
+ *************************************************/
+
 const tbody = document.getElementById("tabla-items");
 
 items.forEach((item, index) => {
@@ -46,29 +55,47 @@ items.forEach((item, index) => {
     <td>${item.categoria}</td>
     <td>${item.objetivo}</td>
     <td>${item.condicion}</td>
-    <td><input type="number" min="0" max="1" id="resp-${index}"></td>
+    <td>
+      <input 
+        type="number" 
+        min="0" 
+        max="1" 
+        step="1"
+        id="resp-${index}"
+      >
+    </td>
   `;
   tbody.appendChild(row);
 });
 
+/*************************************************
+ * PROCESAMIENTO DE RESULTADOS
+ *************************************************/
+
 let chart = null;
 
 function procesar() {
-  const resultados = { "nrp": 0, "rp-": 0, "rp+": 0 };
+  const resultados = {
+    "nrp": 0,
+    "rp-": 0,
+    "rp+": 0
+  };
 
-  items.forEach((item, index) => {
-    const valor = Number(document.getElementById(`resp-${index}`).value);
+  // Validación y conteo
+  for (let i = 0; i < items.length; i++) {
+    const valor = Number(document.getElementById(`resp-${i}`).value);
 
     if (valor !== 0 && valor !== 1) {
-      alert("Todas las casillas deben contener 0 o 1.");
-      throw new Error("Entrada inválida");
+      alert("Todas las casillas deben contener únicamente 0 o 1.");
+      return;
     }
 
     if (valor === 1) {
-      resultados[item.condicion]++;
+      resultados[items[i].condicion]++;
     }
-  });
+  }
 
+  // Determinar condición predominante
   const condicionFinal = Object.keys(resultados).reduce((a, b) =>
     resultados[a] >= resultados[b] ? a : b
   );
@@ -79,10 +106,16 @@ function procesar() {
   dibujarGrafica(resultados);
 }
 
+/*************************************************
+ * GRÁFICA DE BARRAS (Chart.js)
+ *************************************************/
+
 function dibujarGrafica(resultados) {
   const ctx = document.getElementById("grafica").getContext("2d");
 
-  if (chart) chart.destroy();
+  if (chart) {
+    chart.destroy();
+  }
 
   chart = new Chart(ctx, {
     type: "bar",
@@ -98,13 +131,15 @@ function dibujarGrafica(resultados) {
       }]
     },
     options: {
+      responsive: true,
       scales: {
         y: {
           beginAtZero: true,
-          precision: 0
+          ticks: {
+            precision: 0
+          }
         }
       }
     }
   });
 }
-
