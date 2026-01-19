@@ -60,39 +60,29 @@ function procesar() {
   const resultados = { "rp+": 0, "rp-": 0, "nrp": 0 };
   const totales = { "rp+": 0, "rp-": 0, "nrp": 0 };
 
-  // 1. Recopilar datos
   items.forEach((item, index) => {
     const valor = Number(document.getElementById(`resp-${index}`).value) || 0;
     totales[item.condicion]++;
     if (valor === 1) resultados[item.condicion]++;
   });
 
-  // 2. Definir Nombres y Orden Estricto
   const nombresLargo = { 
-    "rp+": "Practicados (RP+)", 
-    "rp-": "No practicados (NRP)", 
-    "nrp": "Relacionados pero no practicados (RP-)" 
+    "rp+": "Practicados", 
+    "rp-": "No practicados", 
+    "nrp": "Relacionados pero no practicados" 
   };
   const orden = ["rp+", "rp-", "nrp"];
 
-  // 3. Llenar tabla de resultados en el ORDEN CORRECTO
   const tbodyRes = document.querySelector("#tabla-resultados tbody");
   tbodyRes.innerHTML = "";
   orden.forEach(c => {
     const porc = Math.round((resultados[c] / totales[c]) * 100) || 0;
-    tbodyRes.innerHTML += `
-      <tr>
-        <td>${nombresLargo[c]}</td>
-        <td>${porc}%</td>
-        <td>${resultados[c]} de ${totales[c]}</td>
-      </tr>`;
+    tbodyRes.innerHTML += `<tr><td>${nombresLargo[c]}</td><td>${porc}%</td><td>${resultados[c]} de ${totales[c]}</td></tr>`;
   });
 
-  // 4. Determinar predominante
   const mejor = orden.reduce((a, b) => (resultados[a]/totales[a]) >= (resultados[b]/totales[b]) ? a : b);
   document.getElementById("condicionFinal").innerText = "Condición predominante: " + nombresLargo[mejor];
 
-  // 5. Dibujar gráfica en el ORDEN CORRECTO
   dibujarGrafica(resultados, totales, orden, nombresLargo);
 }
 
@@ -100,7 +90,6 @@ function dibujarGrafica(res, tot, orden, nombres) {
   const ctx = document.getElementById("grafica").getContext("2d");
   if (chart) chart.destroy();
 
-  // Mapeamos los datos siguiendo el array 'orden'
   const etiquetas = orden.map(c => (c === "nrp" ? "Relacionados" : nombres[c]));
   const datos = orden.map(c => (res[c]/tot[c])*100 || 0);
 
@@ -111,14 +100,10 @@ function dibujarGrafica(res, tot, orden, nombres) {
       datasets: [{
         label: "% de recuerdo",
         data: datos,
-        // NUEVA PALETA PASTEL:
-        // Verde Pastel (#A8E6CF) -> Practicados (rp+)
-        // Azul Pastel  (#DCEDC1) -> No practicados (rp-) --- Nota: He usado un azul suave/cian
-        // Rojo Pastel  (#FF8B94) -> Relacionados (nrp)
         backgroundColor: [
-          "rgba(168, 230, 207, 0.8)", // Verde menta pastel
-          "rgba(174, 198, 239, 0.8)", // Azul cielo suave
-          "rgba(255, 139, 148, 0.8)"  // Rojo coral pastel
+          "rgba(168, 230, 207, 0.8)", // Verde pastel
+          "rgba(174, 198, 239, 0.8)", // Azul pastel
+          "rgba(255, 139, 148, 0.8)"  // Rojo pastel
         ],
         borderColor: [
           "rgba(168, 230, 207, 1)",
@@ -142,4 +127,5 @@ function dibujarGrafica(res, tot, orden, nombres) {
   });
 }
 
-window.onload = renderizarTablaItems;
+// Única llamada al cargar
+document.addEventListener("DOMContentLoaded", renderizarTablaItems);
