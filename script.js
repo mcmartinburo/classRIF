@@ -1,36 +1,39 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Análisis de resultados</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
+const items = [
+  {id:1, categoria:"ESPECIAS", objetivo:"canela", condicion:"nrp"},
+  {id:2, categoria:"ANIMALES", objetivo:"caballo", condicion:"rp-"},
+  {id:3, categoria:"MÚSICA", objetivo:"guitarra", condicion:"nrp"},
+  {id:4, categoria:"PROFESIONES", objetivo:"bombero", condicion:"rp-"},
+  {id:5, categoria:"ESPECIAS", objetivo:"azafrán", condicion:"nrp"},
+  {id:6, categoria:"ANIMALES", objetivo:"tiburón", condicion:"rp-"},
+  {id:7, categoria:"INSTRUMENTOS", objetivo:"flauta", condicion:"nrp"},
+  {id:8, categoria:"ANIMALES", objetivo:"vaca", condicion:"rp-"},
+  {id:9, categoria:"ESPECIAS", objetivo:"perejil", condicion:"nrp"},
+  {id:10, categoria:"PROFESIONES", objetivo:"cocinero", condicion:"rp-"},
+  {id:11, categoria:"INSTRUMENTOS", objetivo:"tambor", condicion:"nrp"},
+  {id:12, categoria:"DEPORTE", objetivo:"ciclismo", condicion:"rp-"},
+  {id:13, categoria:"ESPECIAS", objetivo:"romero", condicion:"nrp"},
+  {id:14, categoria:"FRUTAS", objetivo:"banana", condicion:"rp-"},
+  {id:15, categoria:"INSTRUMENTOS", objetivo:"violín", condicion:"nrp"},
+  {id:16, categoria:"DEPORTE", objetivo:"atletismo", condicion:"rp-"},
+  {id:17, categoria:"ESPECIAS", objetivo:"tomillo", condicion:"nrp"},
+  {id:18, categoria:"FRUTAS", objetivo:"limón", condicion:"rp-"},
+  {id:19, categoria:"INSTRUMENTOS", objetivo:"saxofón", condicion:"nrp"},
+  {id:20, categoria:"PROFESIONES", objetivo:"fontanero", condicion:"rp-"},
+  {id:21, categoria:"ESPECIAS", objetivo:"orégano", condicion:"nrp"},
+  {id:22, categoria:"DEPORTE", objetivo:"patinaje", condicion:"rp-"},
+  {id:23, categoria:"INSTRUMENTOS", objetivo:"clarinete", condicion:"nrp"},
+  {id:24, categoria:"FRUTAS", objetivo:"melón", condicion:"rp-"},
+  {id:25, categoria:"DEPORTE", objetivo:"boxeo", condicion:"rp+"},
+  {id:26, categoria:"FRUTAS", objetivo:"naranja", condicion:"rp+"},
+  {id:27, categoria:"DEPORTE", objetivo:"tenis", condicion:"rp+"},
+  {id:28, categoria:"FRUTAS", objetivo:"fresa", condicion:"rp+"},
+  {id:29, categoria:"PROFESIONES", objetivo:"dentista", condicion:"rp+"},
+  {id:30, categoria:"DEPORTE", objetivo:"natación", condicion:"rp+"},
+  {id:31, categoria:"FRUTAS", objetivo:"piña", condicion:"rp+"},
+  {id:32, categoria:"ANIMALES", objetivo:"burro", condicion:"rp+"},
+  {id:33, categoria:"PROFESIONES", objetivo:"veterinario", condicion:"rp+"},
+  {id:34, categoria:"ANIMALES", objetivo:"paloma", condicion:"rp+"},
+  {id:35, categoria:"ANIMALES", objetivo:"oveja", condicion:"rp+"},
+  {id:36, categoria:"PROFESIONES", objetivo:"jardinero", condicion:"rp+"}
+];
 
-<div class="container">
-  <h1>Análisis de resultados</h1>
-  <p>Introduce <strong>1</strong> si la respuesta es correcta o <strong>0</strong> si es incorrecta.</p>
-
-  <table>
-    <thead>
-      <tr>
-        <th>Ítem</th>
-        <th>Categoría</th>
-        <th>Objetivo</th>
-        <th>Condición</th>
-        <th>¿Correcto?</th>
-      </tr>
-    </thead>
-    <tbody id="tabla-items"></tbody>
-  </table>
-
-  <button onclick="procesar()">Ver resultado</button>
-
-  <h2 id="condicionFinal"></h2>
-  <canvas id="grafica"></canvas>
-</div>
-
-<script src="script.js"></script>
-</body>
-</html>
