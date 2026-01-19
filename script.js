@@ -1,6 +1,3 @@
-/*************************************************
- * 1. DEFINICIÓN DE LOS ÍTEMS (36)
- *************************************************/
 const items = [
   {id:1, categoria:"ESPECIAS", objetivo:"canela", condicion:"nrp"},
   {id:2, categoria:"ANIMALES", objetivo:"caballo", condicion:"rp-"},
@@ -42,79 +39,55 @@ const items = [
 
 let chart = null;
 
-/*************************************************
- * 2. GENERAR TABLA DE ÍTEMS AL INICIAR
- *************************************************/
 function renderizarTablaItems() {
   const tbody = document.getElementById("tabla-items");
   if (!tbody) return;
-
   tbody.innerHTML = "";
-
   items.forEach((item, index) => {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${item.id}</td>
       <td>${item.categoria}</td>
       <td>${item.objetivo}</td>
-      <td>
-      <input type="number" min="0" max="1" step="1" id="resp-${index}" value="0">
       <td>${item.condicion}</td>
-      </td>
+      <td><input type="number" min="0" max="1" step="1" id="resp-${index}" value="0"></td>
     `;
     tbody.appendChild(row);
   });
 }
 
-/*************************************************
- * 3. PROCESAR RESULTADOS
- *************************************************/
 function procesar() {
-  const resultados = { "nrp": 0, "rp-": 0, "rp+": 0 };
-  const totalItems = { "nrp": 0, "rp-": 0, "rp+": 0 };
+  const resultados = { "rp+": 0, "rp-": 0, "nrp": 0 };
+  const totales = { "rp+": 0, "rp-": 0, "nrp": 0 };
 
   items.forEach((item, index) => {
-    const input = document.getElementById(`resp-${index}`);
-    const valor = Number(input.value);
-    
-    totalItems[item.condicion]++;
+    const valor = Number(document.getElementById(`resp-${index}`).value) || 0;
+    totales[item.condicion]++;
     if (valor === 1) resultados[item.condicion]++;
   });
 
-  const porcentajes = {
-    "rp+": (resultados["rp+"] / totalItems["rp+"]) * 100,
-    "rp-": (resultados["rp-"] / totalItems["rp-"]) * 100,
-    "nrp": (resultados["nrp"] / totalItems["nrp"]) * 100
+  const nombresLargo = { 
+    "rp+": "Practicados", 
+    "rp-": "No practicados", 
+    "nrp": "Relacionados pero no practicados" 
   };
 
-  const nombres = { "rp+": "Practicados", "rp-": "No Practicados", "nrp": "Relacionados pero NO practicados" };
-  const mejor = Object.keys(porcentajes).reduce((a, b) => porcentajes[a] >= porcentajes[b] ? a : b);
-  
-  document.getElementById("condicionFinal").innerText = "Condición predominante: " + nombres[mejor];
-
-  generarTablaResultados(resultados, totalItems);
-  dibujarGrafica(resultados, totalItems);
-}
-
-function generarTablaResultados(resultados, totalItems) {
+  // Tabla de resultados
   const tbodyRes = document.querySelector("#tabla-resultados tbody");
-  if(!tbodyRes) return;
   tbodyRes.innerHTML = "";
-  
-  const nombres = { "rp+": "Practicados", "rp-": "No practicados", "nrp": "Relacionados" };
-
   ["rp+", "rp-", "nrp"].forEach(c => {
-    const porc = Math.round((resultados[c] / totalItems[c]) * 100) || 0;
-    const fila = document.createElement("tr");
-    fila.innerHTML = `<td>${nombres[c]}</td><td>${porc}%</td><td>${resultados[c]}</td>`;
-    tbodyRes.appendChild(fila);
+    const porc = Math.round((resultados[c] / totales[c]) * 100) || 0;
+    tbodyRes.innerHTML += `<tr><td>${nombresLargo[c]}</td><td>${porc}%</td><td>${resultados[c]}</td></tr>`;
   });
+
+  // Condición predominante
+  const mejor = ["rp+", "rp-", "nrp"].reduce((a, b) => (resultados[a]/totales[a]) >= (resultados[b]/totales[b]) ? a : b);
+  document.getElementById("condicionFinal").innerText = "Condición predominante: " + nombresLargo[mejor];
+
+  dibujarGrafica(resultados, totales);
 }
 
-/*************************************************
- * 4. DIBUJAR GRÁFICA (ALARGADA CON % EN EJE Y)
- *************************************************/
-function dibujarGrafica(resultados, totalItems) {
+function dibujarGrafica(res, tot) {
   const ctx = document.getElementById("grafica").getContext("2d");
   if (chart) chart.destroy();
 
@@ -125,28 +98,28 @@ function dibujarGrafica(resultados, totalItems) {
       datasets: [{
         label: "% de recuerdo",
         data: [
-          (resultados["rp+"]/totalItems["rp+"])*100,
-          (resultados["rp-"]/totalItems["rp-"])*100,
-          (resultados["nrp"]/totalItems["nrp"])*100
+          (res["rp+"]/tot["rp+"])*100 || 0,
+          (res["rp-"]/tot["rp-"])*100 || 0,
+          (res["nrp"]/tot["nrp"])*100 || 0
         ],
         backgroundColor: ["#2ecc71", "#e74c3c", "#3498db"]
       }]
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false, // Permite estirar según CSS
+      maintainAspectRatio: false,
       scales: {
         y: {
           beginAtZero: true,
           max: 100,
-          ticks: {
-            callback: function(value) { return value + "%"; } // Añade % al eje Y
-          }
+          ticks: { callback: (v) => v + "%" }
         }
       }
     }
   });
 }
+
+document.addEventListener("DOMContentLoaded", renderizarTablaItems);
 
 // LANZAR AL CARGAR
 document.addEventListener("DOMContentLoaded", renderizarTablaItems);
