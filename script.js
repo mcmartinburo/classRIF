@@ -66,11 +66,7 @@ function procesar() {
         if (valor === 1) resultados[item.condicion]++;
     });
 
-    const nombresLargo = { 
-        "rp+": "Practicados", 
-        "rp-": "No practicados", 
-        "nrp": "Relacionados pero no practicados" 
-    };
+    const nombresLargo = { "rp+": "Practicados", "rp-": "No practicados", "nrp": "Relacionados" };
     const orden = ["rp+", "rp-", "nrp"];
 
     const tbodyRes = document.querySelector("#tabla-resultados tbody");
@@ -79,29 +75,28 @@ function procesar() {
         const porc = Math.round((resultados[c] / totales[c]) * 100) || 0;
         tbodyRes.innerHTML += `<tr><td>${nombresLargo[c]}</td><td>${porc}%</td><td>${resultados[c]} de ${totales[c]}</td></tr>`;
     });
-    
-document.getElementById("titulo-espera").innerText = "Resultados del Análisis";
 
-    dibujarGrafica(resultados, totales, orden);
-const mensaje = document.getElementById("mensaje-espera");
-if (mensaje) mensaje.style.display = "none";
+    // Quitar mensaje de espera
+    const msj = document.getElementById("mensaje-espera");
+    if (msj) msj.style.display = "none";
+
+    dibujarGrafica(resultados, totales, orden, nombresLargo);
 }
 
-function dibujarGrafica(res, tot, orden) {
+function dibujarGrafica(res, tot, orden, nombres) {
     const ctx = document.getElementById("grafica").getContext("2d");
     if (chart) chart.destroy();
 
-    const etiquetas = ["Practicados", "No practicados", "Relacionados"];
     const datos = orden.map(c => (res[c]/tot[c])*100 || 0);
 
     chart = new Chart(ctx, {
         type: "bar",
         data: {
-            labels: etiquetas,
+            labels: ["Practicados", "No practicados", "Relacionados"],
             datasets: [{
                 label: "% de recuerdo",
                 data: datos,
-                backgroundColor: ["#A8E6CF", "#AEC6EF", "#FF8B94"], // VERDE, AZUL, ROJO PASTEL
+                backgroundColor: ["#A8E6CF", "#AEC6EF", "#FF8B94"],
                 borderColor: ["#8ED1B7", "#95AEDA", "#E57881"],
                 borderWidth: 1
             }]
@@ -111,13 +106,11 @@ function dibujarGrafica(res, tot, orden) {
             maintainAspectRatio: false,
             scales: {
                 y: { beginAtZero: true, max: 100, ticks: { callback: v => v + "%" } }
-            },
-            plugins: { legend: { display: false } }
+            }
         }
     });
 }
 
-// Inicialización
 window.onload = renderizarTablaItems;
 
 // Inicialización
