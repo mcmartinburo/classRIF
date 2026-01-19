@@ -9,11 +9,9 @@
 <body>
 <div class="container">
   <h1>Análisis de resultados</h1>
-
   <p>Introduce <strong>1</strong> si la respuesta es correcta o <strong>0</strong> si es incorrecta.</p>
 
-  <!-- TABLA DE ENTRADA -->
-  <h2>Tabla de respuestas</h2>
+  <!-- Tabla de entrada -->
   <table>
     <thead>
       <tr>
@@ -24,16 +22,15 @@
         <th>¿Correcto?</th>
       </tr>
     </thead>
-    <tbody id="tabla-items">
-      <!-- Se llenará automáticamente con script.js -->
-    </tbody>
+    <tbody id="tabla-items"></tbody>
   </table>
 
   <button onclick="procesar()">Ver resultado</button>
 
+  <!-- Resultado de condición predominante -->
   <h2 id="condicionFinal"></h2>
 
-  <!-- TABLA DE RESULTADOS -->
+  <!-- Tabla de resultados primero -->
   <h2>Tabla de resultados</h2>
   <table id="tabla-resultados">
     <thead>
@@ -48,12 +45,11 @@
     </tbody>
   </table>
 
-  <!-- GRÁFICA -->
+  <!-- Gráfica debajo de la tabla -->
   <h2>Gráfica de resultados</h2>
   <canvas id="grafica"></canvas>
 </div>
 
-<!-- SCRIPT AL FINAL DEL BODY -->
 <script src="script.js"></script>
 </body>
 </html>
