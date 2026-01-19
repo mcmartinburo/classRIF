@@ -129,8 +129,21 @@ function dibujarGrafica(resultados, totalItems) {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false,
-      scales: { y: { beginAtZero: true, max: 100 } }
+      maintainAspectRatio: false, // Esto permite que se estire a lo ancho sin crecer en alto
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100,
+          ticks: {
+            stepSize: 10
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: false // Opcional: quita la leyenda si quieres más espacio
+        }
+      }
     }
   });
 }
