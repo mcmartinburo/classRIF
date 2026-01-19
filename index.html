@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análisis de Memoria - Resultados</title>
+    <title>Análisis de Memoria</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
 <div class="container">
     <header>
         <h1>Análisis de Resultados</h1>
-        <p>Complete la evaluación introduciendo <strong>1</strong> (acierto) o <strong>0</strong> (error) para cada ítem.</p>
+        <p>Introduce <strong>1</strong> (acierto) o <strong>0</strong> (error).</p>
     </header>
 
     <section class="data-entry">
@@ -20,13 +20,10 @@
                 <tr>
                     <th>Ítem</th>
                     <th>Categoría</th>
-                    <th>Objetivo</th>
-                    <th>¿Correcto?</th>
-                    <th>Condición</th>
+                    <th>¿Correcto?</th> <th>Condición</th>  <th>Objetivo</th>
                 </tr>
             </thead>
-            <tbody id="tabla-items">
-                </tbody>
+            <tbody id="tabla-items"></tbody>
         </table>
 
         <button onclick="procesar()">Procesar y Ver Resultados</button>
@@ -35,23 +32,20 @@
     <hr>
 
     <section id="resultados-seccion">
-        <div id="resultado-destacado">
-            <h2 id="condicionFinal">Esperando datos...</h2>
-        </div>
+        <h2 id="condicionFinal">Esperando datos...</h2>
 
         <div class="results-grid">
             <div class="table-wrapper">
-                <h2>Resumen de resultados</h2>
+                <h2>Resumen de Métricas</h2>
                 <table id="tabla-resultados">
                     <thead>
                         <tr>
                             <th>Condición</th>
                             <th>% Recuerdo</th>
-                            <th>Palabras recordadas</th>
+                            <th>Palabras</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
 
@@ -67,6 +61,5 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="script.js"></script>
-
 </body>
 </html>
