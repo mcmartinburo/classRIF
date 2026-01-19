@@ -41,7 +41,7 @@ const items = [
 ];
 
 /*************************************************
- * GENERAR TABLA DE ENTRADA AL CARGAR PÁGINA
+ * GENERAR TABLA DE ENTRADA
  *************************************************/
 const tbody = document.getElementById("tabla-items");
 
@@ -52,7 +52,9 @@ items.forEach((item, index) => {
     <td>${item.categoria}</td>
     <td>${item.objetivo}</td>
     <td>${item.condicion}</td>
-    <td><input type="number" min="0" max="1" step="1" id="resp-${index}"></td>
+    <td>
+      <input type="number" min="0" max="1" step="1" id="resp-${index}">
+    </td>
   `;
   tbody.appendChild(row);
 });
@@ -73,18 +75,51 @@ function procesar() {
       alert("Todas las casillas deben contener únicamente 0 o 1.");
       throw new Error("Entrada inválida");
     }
+
     totalItems[item.condicion]++;
     if (valor === 1) resultados[item.condicion]++;
   });
 
-  // Condición predominante
+  // Determinar condición predominante
   const condicionFinal = Object.keys(resultados).reduce((a,b) => resultados[a]>=resultados[b]?a:b);
   document.getElementById("condicionFinal").innerText = "Condición predominante: " + condicionFinal;
 
-  // Primero tabla de resultados
-  generarTablaResultados(resultados, totalItems);
-  // Después la gráfica
   dibujarGrafica(resultados, totalItems);
+  generarTablaResultados(resultados, totalItems);
+}
+
+/*************************************************
+ * DIBUJAR GRÁFICA SOBRE PORCENTAJES
+ *************************************************/
+function dibujarGrafica(resultados, totalItems) {
+  const ctx = document.getElementById("grafica").getContext("2d");
+  if(chart) chart.destroy();
+
+  const etiquetas = ["Practicados", "No practicados", "Relacionados pero NP"];
+  const colores = ["green","red","blue"];
+  const data = [
+    Math.round((resultados["rp+"]/totalItems["rp+"])*100),
+    Math.round((resultados["rp-"]/totalItems["rp-"])*100),
+    Math.round((resultados["nrp"]/totalItems["nrp"])*100)
+  ];
+
+  chart = new Chart(ctx, {
+    type:"bar",
+    data:{
+      labels: etiquetas,
+      datasets:[{
+        label:"% Recuerdo",
+        data: data,
+        backgroundColor: colores
+      }]
+    },
+    options:{
+      responsive:true,
+      scales:{
+        y:{ beginAtZero:true, max:100, ticks:{ stepSize:10 } }
+      }
+    }
+  });
 }
 
 /*************************************************
@@ -93,6 +128,21 @@ function procesar() {
 function generarTablaResultados(resultados, totalItems) {
   const tbodyRes = document.getElementById("tabla-resultados").querySelector("tbody");
   tbodyRes.innerHTML = "";
+
+  const nombresCondicion = { "rp+":"Practicados", "rp-":"No practicados", "nrp":"Relacionados pero NP" };
+
+  ["rp+","rp-","nrp"].forEach(c => {
+    const porcentaje = Math.round((resultados[c]/totalItems[c])*100);
+    const fila = document.createElement("tr");
+    fila.innerHTML = `
+      <td>${nombresCondicion[c]}</td>
+      <td>${porcentaje}%</td>
+      <td>${resultados[c]}</td>
+    `;
+    tbodyRes.appendChild(fila);
+  });
+}
+
   const nombresCondicion = { "rp+":"Practicados", "rp-":"No practicados", "nrp":"Relacionados pero NP" };
 
   ["r]()
