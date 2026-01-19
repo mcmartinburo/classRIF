@@ -48,9 +48,7 @@ function renderizarTablaItems() {
     row.innerHTML = `
       <td>${item.id}</td>
       <td>${item.categoria}</td>
-      <td>${item.objetivo}</td>
-      <td>${item.condicion}</td>
-      <td><input type="number" min="0" max="1" step="1" id="resp-${index}" value="0"></td>
+      <td><input type="number" min="0" max="1" id="resp-${index}" value="0"></td> <td><strong>${item.condicion}</strong></td> <td>${item.objetivo}</td>
     `;
     tbody.appendChild(row);
   });
@@ -72,7 +70,6 @@ function procesar() {
     "nrp": "Relacionados pero no practicados" 
   };
 
-  // Tabla de resultados
   const tbodyRes = document.querySelector("#tabla-resultados tbody");
   tbodyRes.innerHTML = "";
   ["rp+", "rp-", "nrp"].forEach(c => {
@@ -80,7 +77,6 @@ function procesar() {
     tbodyRes.innerHTML += `<tr><td>${nombresLargo[c]}</td><td>${porc}%</td><td>${resultados[c]}</td></tr>`;
   });
 
-  // Condición predominante
   const mejor = ["rp+", "rp-", "nrp"].reduce((a, b) => (resultados[a]/totales[a]) >= (resultados[b]/totales[b]) ? a : b);
   document.getElementById("condicionFinal").innerText = "Condición predominante: " + nombresLargo[mejor];
 
