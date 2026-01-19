@@ -80,8 +80,25 @@ function procesar() {
         tbodyRes.innerHTML += `<tr><td>${nombresLargo[c]}</td><td>${porc}%</td><td>${resultados[c]} de ${totales[c]}</td></tr>`;
     });
 
-    const mejor = orden.reduce((a, b) => (resultados[a]/totales[a]) >= (resultados[b]/totales[b]) ? a : b);
-    document.getElementById("condicionFinal").innerText = "Condición predominante: " + nombresLargo[mejor];
+   // 1. Calculamos los porcentajes de cada una
+const porcentajeNRP = (resultados["nrp"] / totales["nrp"]) * 100 || 0;
+const porcentajeRPmin = (resultados["rp-"] / totales["rp-"]) * 100 || 0;
+
+// 2. Calculamos la diferencia
+const diferencia = (porcentajeNRP - porcentajeRPmin).toFixed(1);
+
+// 3. Mostramos el mensaje dinámico
+let mensajeComparacion = "";
+if (porcentajeNRP > porcentajeRPmin) {
+    mensajeComparacion = `Efecto RIF detectado: NRP (${porcentajeNRP.toFixed(1)}%) es mayor que RP- (${porcentajeRPmin.toFixed(1)}%) por una diferencia de ${diferencia} puntos.`;
+} else if (porcentajeNRP < porcentajeRPmin) {
+    mensajeComparacion = `No se observa el efecto esperado: NRP (${porcentajeNRP.toFixed(1)}%) es menor que RP- (${porcentajeRPmin.toFixed(1)}%). Diferencia: ${diferencia} puntos.`;
+} else {
+    mensajeComparacion = `Ambas condiciones son iguales (${porcentajeNRP.toFixed(1)}%). No hay diferencia detectable.`;
+}
+
+// 4. Lo pintamos en el HTML
+document.getElementById("condicionFinal").innerText = mensajeComparacion;
 
     dibujarGrafica(resultados, totales, orden);
 }
