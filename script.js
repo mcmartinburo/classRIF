@@ -93,7 +93,53 @@ function procesar() {
   document.getElementById("condicionFinal").innerText = "Condición predominante: " + nombres[mejor];
 
   generarTablaResultados(resultados, totalItems);
-  dibujarGrafica(resultados, totalItems);
+  function dibujarGrafica(resultados, totalItems) {
+  const ctx = document.getElementById("grafica").getContext("2d");
+  if (chart) chart.destroy();
+
+  const dataValues = [
+    Math.round((resultados["rp+"] / totalItems["rp+"]) * 100) || 0,
+    Math.round((resultados["rp-"] / totalItems["rp-"]) * 100) || 0,
+    Math.round((resultados["nrp"] / totalItems["nrp"]) * 100) || 0
+  ];
+
+  chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["Practicados (RP+)", "No practicados (RP-)", "Relacionados (NRP)"],
+      datasets: [{
+        label: "% de recuerdo",
+        data: dataValues,
+        backgroundColor: ["#2ecc71", "#e74c3c", "#3498db"],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false, // CLAVE: Permite que se estire según el CSS
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100,
+          ticks: {
+            stepSize: 10,
+            // CLAVE: Añade el símbolo % al eje Y
+            callback: function(value) {
+              return value + "%";
+            }
+          },
+          title: {
+            display: true,
+            text: 'Porcentaje de Recuerdo',
+            font: { weight: 'bold' }
+          }
+        }
+      },
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  });
 }
 
 function generarTablaResultados(resultados, totalItems) {
