@@ -28,7 +28,125 @@ const items = [
   {id:24, categoria:"FRUTAS", objetivo:"melón", condicion:"rp-"},
   {id:25, categoria:"DEPORTE", objetivo:"boxeo", condicion:"rp+"},
   {id:26, categoria:"FRUTAS", objetivo:"naranja", condicion:"rp+"},
-  {id:27, categoria:"DE
+  {id:27, categoria:"DEPORTE", objetivo:"tenis", condicion:"rp+"},
+  {id:28, categoria:"FRUTAS", objetivo:"fresa", condicion:"rp+"},
+  {id:29, categoria:"PROFESIONES", objetivo:"dentista", condicion:"rp+"},
+  {id:30, categoria:"DEPORTE", objetivo:"natación", condicion:"rp+"},
+  {id:31, categoria:"FRUTAS", objetivo:"piña", condicion:"rp+"},
+  {id:32, categoria:"ANIMALES", objetivo:"burro", condicion:"rp+"},
+  {id:33, categoria:"PROFESIONES", objetivo:"veterinario", condicion:"rp+"},
+  {id:34, categoria:"ANIMALES", objetivo:"paloma", condicion:"rp+"},
+  {id:35, categoria:"ANIMALES", objetivo:"oveja", condicion:"rp+"},
+  {id:36, categoria:"PROFESIONES", objetivo:"jardinero", condicion:"rp+"}
+];
 
-// Iniciar al cargar
+let chart = null;
+
+/*************************************************
+ * 2. GENERAR TABLA DE ÍTEMS AL INICIAR
+ *************************************************/
+function renderizarTablaItems() {
+  const tbody = document.getElementById("tabla-items");
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+
+  items.forEach((item, index) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${item.id}</td>
+      <td>${item.categoria}</td>
+      <td>${item.objetivo}</td>
+      <td>${item.condicion}</td>
+      <td>
+        <input type="number" min="0" max="1" step="1" id="resp-${index}" value="0">
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+/*************************************************
+ * 3. PROCESAR RESULTADOS
+ *************************************************/
+function procesar() {
+  const resultados = { "nrp": 0, "rp-": 0, "rp+": 0 };
+  const totalItems = { "nrp": 0, "rp-": 0, "rp+": 0 };
+
+  items.forEach((item, index) => {
+    const input = document.getElementById(`resp-${index}`);
+    const valor = Number(input.value);
+    
+    totalItems[item.condicion]++;
+    if (valor === 1) resultados[item.condicion]++;
+  });
+
+  const porcentajes = {
+    "rp+": (resultados["rp+"] / totalItems["rp+"]) * 100,
+    "rp-": (resultados["rp-"] / totalItems["rp-"]) * 100,
+    "nrp": (resultados["nrp"] / totalItems["nrp"]) * 100
+  };
+
+  const nombres = { "rp+": "Practicados", "rp-": "No Practicados", "nrp": "Relacionados (NRP)" };
+  const mejor = Object.keys(porcentajes).reduce((a, b) => porcentajes[a] >= porcentajes[b] ? a : b);
+  
+  document.getElementById("condicionFinal").innerText = "Condición predominante: " + nombres[mejor];
+
+  generarTablaResultados(resultados, totalItems);
+  dibujarGrafica(resultados, totalItems);
+}
+
+function generarTablaResultados(resultados, totalItems) {
+  const tbodyRes = document.querySelector("#tabla-resultados tbody");
+  if(!tbodyRes) return;
+  tbodyRes.innerHTML = "";
+  
+  const nombres = { "rp+": "Practicados", "rp-": "No practicados", "nrp": "Relacionados" };
+
+  ["rp+", "rp-", "nrp"].forEach(c => {
+    const porc = Math.round((resultados[c] / totalItems[c]) * 100) || 0;
+    const fila = document.createElement("tr");
+    fila.innerHTML = `<td>${nombres[c]}</td><td>${porc}%</td><td>${resultados[c]}</td>`;
+    tbodyRes.appendChild(fila);
+  });
+}
+
+/*************************************************
+ * 4. DIBUJAR GRÁFICA (ALARGADA CON % EN EJE Y)
+ *************************************************/
+function dibujarGrafica(resultados, totalItems) {
+  const ctx = document.getElementById("grafica").getContext("2d");
+  if (chart) chart.destroy();
+
+  chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["Practicados", "No practicados", "Relacionados"],
+      datasets: [{
+        label: "% de recuerdo",
+        data: [
+          (resultados["rp+"]/totalItems["rp+"])*100,
+          (resultados["rp-"]/totalItems["rp-"])*100,
+          (resultados["nrp"]/totalItems["nrp"])*100
+        ],
+        backgroundColor: ["#2ecc71", "#e74c3c", "#3498db"]
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false, // Permite estirar según CSS
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100,
+          ticks: {
+            callback: function(value) { return value + "%"; } // Añade % al eje Y
+          }
+        }
+      }
+    }
+  });
+}
+
+// LANZAR AL CARGAR
 document.addEventListener("DOMContentLoaded", renderizarTablaItems);
