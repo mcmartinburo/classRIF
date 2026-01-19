@@ -71,7 +71,7 @@ function procesar() {
         "nrp": "No practicados (NRP)",
         "rp-": "No practicados pero Relacionados (RP-)"
     };
-    const orden = ["rp+", "rp-", "nrp"];
+    const orden = ["rp+", "nrp", "rp-"];
 
     const tbodyRes = document.querySelector("#tabla-resultados tbody");
     tbodyRes.innerHTML = "";
