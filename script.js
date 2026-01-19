@@ -1,3 +1,36 @@
+// Añade esta línea al principio de todo tu script.js para verificar que carga
+console.log("Script cargado correctamente");
+
+function renderizarTablaItems() {
+    const tbody = document.getElementById("tabla-items");
+    
+    // Si no encuentra el elemento, lo buscamos de nuevo tras un pequeño retraso
+    if (!tbody) {
+        console.warn("No se encontró tabla-items, reintentando...");
+        setTimeout(renderizarTablaItems, 100); 
+        return;
+    }
+
+    tbody.innerHTML = ""; 
+    items.forEach((item, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${item.id}</td>
+            <td>${item.categoria}</td>
+            <td>${item.objetivo}</td>
+            <td><strong>${item.condicion.toUpperCase()}</strong></td>
+            <td>
+                <input type="number" min="0" max="1" value="0" id="resp-${index}">
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+    console.log("Tabla renderizada con éxito");
+}
+
+// Cambia la última línea por esta
+window.onload = renderizarTablaItems;
+
 /*************************************************
  * DEFINICIÓN DE LOS ÍTEMS (36)
  *************************************************/
