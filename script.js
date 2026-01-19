@@ -41,9 +41,8 @@ const items = [
 ];
 
 /*************************************************
- * FUNCION PARA GENERAR LA TABLA DE ÍTEMS
+ * GENERAR TABLA DE ÍTEMS
  *************************************************/
-// Generar tabla de ítems cuando la página termine de cargar
 window.onload = function() {
   const tbody = document.getElementById("tabla-items");
   if (!tbody) {
@@ -90,9 +89,10 @@ function procesar() {
   const condicionFinal = Object.keys(resultados).reduce((a,b) => resultados[a]>=resultados[b]?a:b);
   document.getElementById("condicionFinal").innerText = "Condición predominante: " + condicionFinal;
 
-  // Primero tabla de resultados
+  // Generar tabla de resultados
   generarTablaResultados(resultados, totalItems);
-  // Después la gráfica
+
+  // Generar gráfica
   dibujarGrafica(resultados, totalItems);
 }
 
@@ -155,8 +155,3 @@ function dibujarGrafica(resultados, totalItems) {
     }
   });
 }
-
-
-  const nombresCondicion = { "rp+":"Practicados", "rp-":"No practicados", "nrp":"Relacionados pero NP" };
-
-  ["r]()
