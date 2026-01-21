@@ -150,6 +150,3 @@ function dibujarGrafica(res, tot, orden) {
 
 // Inicialización
 window.onload = renderizarTablaItems;
-
-// Inicialización
-window.onload = renderizarTablaItems;
